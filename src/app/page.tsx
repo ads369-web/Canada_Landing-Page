@@ -43,26 +43,26 @@ export default function Home() {
     <div className="min-h-screen bg-[#FAF8F2] text-[#2E2618]">
 
       {/* ================= HEADER & NAVIGATION ================= */}
-      <header className="sticky top-0 z-50 bg-[#FAF8F2]/95 backdrop-blur-md border-b border-[#E8E2D5] px-4 sm:px-6 py-3.5 transition-all">
+      <header className="sticky top-0 z-50 bg-[#FAF8F2]/95 backdrop-blur-md border-b border-[#E8E2D5] px-4 sm:px-6 py-3 transition-all">
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
           
           {/* Brand */}
-          <a href="#" className="flex items-center gap-3">
-            <div className="relative w-8 h-8 shrink-0">
+          <a href="#" className="flex items-center gap-3 group">
+            <div className="relative w-11 h-11 sm:w-12 sm:h-12 shrink-0">
               <Image 
                 src="/assets/wdl_logo.png" 
                 alt="World Divine Light" 
-                width={36} 
-                height={36} 
+                width={48} 
+                height={48} 
                 className="object-contain" 
                 priority
               />
             </div>
-            <div className="border-l border-[#E8E2D5] pl-3 hidden sm:block">
-              <span className="block font-serif font-bold text-sm md:text-base text-[#14110C] leading-tight">
+            <div className="border-l border-[#E8E2D5] pl-3 flex flex-col justify-center">
+              <span className="block font-serif font-bold text-sm sm:text-base text-[#9E7422] group-hover:text-[#7A5515] leading-tight transition-colors">
                 Vancouver Spiritual Center
               </span>
-              <span className="block text-[11px] text-[#7A6840] tracking-wide">
+              <span className="block text-[11px] text-[#6C5D4B] font-medium tracking-wide">
                 World Divine Light Organization (Canada)
               </span>
             </div>
@@ -245,59 +245,72 @@ export default function Home() {
       {/* ================= 4. 文章 (OUR HEART) ================= */}
       {/* Our heart / Our Mission: Bringing Light and Harmony to Everyday Life */}
       <section id="heart" className="py-20 bg-white border-y border-[#E8E2D5]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
           
           <div className="text-center mb-10">
-            <h2 className="font-serif text-2xl sm:text-4xl font-bold text-[#14110C] mb-2">
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#14110C] mb-3">
               Our heart
             </h2>
-            <p className="font-serif text-lg sm:text-xl text-[#C09040] italic">
+            <p className="font-serif text-xl sm:text-2xl text-[#9E7422] italic">
               Our Mission: Bringing Light and Harmony to Everyday Life
             </p>
           </div>
 
-          <div className="bg-[#FAF8F2] border border-[#C09040]/25 rounded-2xl p-6 sm:p-10 shadow-sm space-y-6">
-            
-            {/* Item 1 */}
-            <div>
-              <h3 className="font-serif font-bold text-base sm:text-lg text-[#14110C] mb-1.5 flex items-center gap-2">
-                <span>🌱</span> For Anyone Feeling Overwhelmed
-              </h3>
-              <p className="text-sm text-[#554C42] leading-relaxed">
-                Designed for those exhausted by the constant pressure of work and daily life, needing a quiet space for deep mental rest.
-              </p>
-            </div>
+          {/* Mission Statement Intro */}
+          <div className="bg-[#FAF8F2] border border-[#C09040]/30 rounded-2xl p-6 sm:p-10 shadow-sm mb-12">
+            <p className="text-base sm:text-lg text-[#3E3426] leading-relaxed">
+              World Divine Light was established to help people regain their innermost heart of unconditional love, sincerity, and peace. We believe that the soul, mind, and body are deeply interconnected. When we purify and care for the spiritual source first, positive energy naturally flows down to revitalize our mind, body, and daily lives. Our purpose is to share this universal practice so that everyone can become &ldquo;people of light&rdquo;&mdash;bringing warmth, harmony, and well-being to their homes, workplaces, and communities.
+            </p>
+          </div>
 
-            {/* Item 2 */}
-            <div className="pt-4 border-t border-[#E8E2D5]/70">
-              <h3 className="font-serif font-bold text-base sm:text-lg text-[#14110C] mb-1.5 flex items-center gap-2">
-                <span>✨</span> Effortless Energy & Mind Care
-              </h3>
-              <p className="text-sm text-[#554C42] leading-relaxed">
-                A welcoming space for everyone to practice "spiritual maintenance" — as naturally and easily as attending a yoga class or standard gym.
-              </p>
-            </div>
+          {/* What You'll Experience Subsection */}
+          <div>
+            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-center text-[#14110C] mb-8">
+              What You&rsquo;ll Experience
+            </h3>
 
-            {/* Item 3 */}
-            <div className="pt-4 border-t border-[#E8E2D5]/70">
-              <h3 className="font-serif font-bold text-base sm:text-lg text-[#14110C] mb-1.5 flex items-center gap-2">
-                <span>🕊</span> Instant Relief and Renewal
-              </h3>
-              <p className="text-sm text-[#554C42] leading-relaxed">
-                Feel your tension melt away the moment you arrive, and leave with a clear mind, restored clarity, and vibrant energy.
-              </p>
-            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              
+              {/* Item 1 */}
+              <div className="bg-[#FAF8F2] border border-[#C09040]/30 rounded-2xl p-6 sm:p-7 shadow-sm flex flex-col">
+                <div className="w-10 h-10 rounded-full bg-[#C09040]/15 text-[#9E7422] flex items-center justify-center text-lg mb-4 font-bold">
+                  ✨
+                </div>
+                <h4 className="font-serif text-lg font-bold text-[#14110C] mb-2 leading-snug">
+                  Purifying Soul, Mind, and Body
+                </h4>
+                <p className="text-sm text-[#554C42] leading-relaxed">
+                  Based on the principle that spirit, mind, and body are connected, the Art of Divine Light purifies the spiritual aspect at its source, helping relieve fatigue and restore natural balance.
+                </p>
+              </div>
 
-            {/* Item 4 */}
-            <div className="pt-4 border-t border-[#E8E2D5]/70">
-              <h3 className="font-serif font-bold text-base sm:text-lg text-[#14110C] mb-1.5 flex items-center gap-2">
-                <span>🏡</span> Your Safe, Welcoming Third Place
-              </h3>
-              <p className="text-sm text-[#554C42] leading-relaxed">
-                A warm and comforting space for anyone feeling isolated by language barriers or cultural differences, offering a true sense of belonging.
-              </p>
-            </div>
+              {/* Item 2 */}
+              <div className="bg-[#FAF8F2] border border-[#C09040]/30 rounded-2xl p-6 sm:p-7 shadow-sm flex flex-col">
+                <div className="w-10 h-10 rounded-full bg-[#C09040]/15 text-[#9E7422] flex items-center justify-center text-lg mb-4 font-bold">
+                  🌱
+                </div>
+                <h4 className="font-serif text-lg font-bold text-[#14110C] mb-2 leading-snug">
+                  Learning Universal Laws with an Open Mind
+                </h4>
+                <p className="text-sm text-[#554C42] leading-relaxed">
+                  Discover universal principles that complement your existing values. People of all backgrounds and faiths are welcome with no need to convert.
+                </p>
+              </div>
 
+              {/* Item 3 */}
+              <div className="bg-[#FAF8F2] border border-[#C09040]/30 rounded-2xl p-6 sm:p-7 shadow-sm flex flex-col">
+                <div className="w-10 h-10 rounded-full bg-[#C09040]/15 text-[#9E7422] flex items-center justify-center text-lg mb-4 font-bold">
+                  🕊
+                </div>
+                <h4 className="font-serif text-lg font-bold text-[#14110C] mb-2 leading-snug">
+                  Becoming &ldquo;People of Light&rdquo;
+                </h4>
+                <p className="text-sm text-[#554C42] leading-relaxed">
+                  Through purification and universal principles, cultivate inner positivity and bring warmth, clarity, and harmony into your home, work, and community.
+                </p>
+              </div>
+
+            </div>
           </div>
 
         </div>
@@ -425,10 +438,10 @@ export default function Home() {
             Your hosts
           </h2>
 
-          <div className="bg-white border border-[#C09040]/25 rounded-2xl p-8 sm:p-10 text-center max-w-md mx-auto shadow-sm">
+          <div className="bg-white border border-[#C09040]/25 rounded-2xl p-8 sm:p-10 text-center max-w-sm mx-auto shadow-sm">
             
             {/* Host Image */}
-            <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-[#C09040] shadow-md">
+            <div className="relative w-36 h-36 mx-auto mb-5 rounded-full overflow-hidden border-2 border-[#C09040] shadow-md">
               <Image 
                 src="/assets/staff_yui_takeda.jpg" 
                 alt="Yui Takeda" 
@@ -437,15 +450,11 @@ export default function Home() {
               />
             </div>
 
-            <h3 className="font-serif text-xl font-bold text-[#14110C] mb-1">
+            <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#14110C] mb-1">
               Yui Takeda
             </h3>
-            <p className="text-xs uppercase tracking-wider font-semibold text-[#C09040] mb-4">
+            <p className="text-xs uppercase tracking-wider font-semibold text-[#9E7422]">
               Minister
-            </p>
-
-            <p className="text-sm text-[#554C42] leading-relaxed italic">
-              “Our doors and hearts are open to all people. Whatever questions or stress you carry, we warmly invite you to experience the comforting stillness of Divine Light. We look forward to meeting you.”
             </p>
 
           </div>
@@ -482,7 +491,7 @@ export default function Home() {
                 <span className="text-[#C09040] text-lg font-normal ml-3">▼</span>
               </summary>
               <div className="mt-3 pt-3 border-t border-[#E8E2D5]/70 text-sm text-[#554C42] leading-relaxed">
-                Open to everyone — no prior background or spiritual experience needed. You will never be asked to change your beliefs.
+                Open to everyone — no prior background or spiritual experience needed.
               </div>
             </details>
 
@@ -685,19 +694,41 @@ export default function Home() {
 
       {/* ================= 10. フッター (FOOTER) ================= */}
       {/* (見出しなし) */}
-      <footer className="bg-[#0A0806] text-[#F5E9CC]/80 py-12 px-4 text-center text-xs">
-        <div className="max-w-4xl mx-auto space-y-3">
-          <p className="font-serif text-lg text-white font-bold">
+      <footer className="bg-[#0A0806] text-[#F5E9CC]/80 py-16 px-4 text-center text-xs">
+        <div className="max-w-4xl mx-auto space-y-4">
+          <p className="font-serif text-xl text-white font-bold tracking-wide">
             World Divine Light Organization
           </p>
-
-          <p className="opacity-75">
-            2800 Douglas Road, Unit E, Burnaby, B.C. V5C 5B7, Canada
+          <p className="text-[#C09040] font-medium text-sm">
+            Vancouver Spiritual Center (Burnaby)
           </p>
 
-          <p className="opacity-75">
-            <a href="tel:+16045682867" className="hover:text-white">+1 (604) 568-2867</a> · 
-            <a href="mailto:info-can@worlddivinelight.org" className="hover:text-white ml-2">info-can@worlddivinelight.org</a>
+          {/* Operating Hours (開場時間) */}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 max-w-md mx-auto my-4 text-left sm:text-center space-y-1.5">
+            <p className="font-semibold text-xs tracking-wider uppercase text-[#C09040] mb-2">
+              Opening Hours / 開場時間
+            </p>
+            <p className="text-[#F5E9CC]/90 text-xs">
+              <strong>Tuesday – Friday:</strong> 12:00 PM – 7:00 PM
+            </p>
+            <p className="text-[#F5E9CC]/90 text-xs">
+              <strong>Saturday – Sunday:</strong> 10:00 AM – 4:00 PM
+            </p>
+            <p className="text-[#F5E9CC]/70 text-xs">
+              <strong>Monday:</strong> Closed
+            </p>
+            <p className="text-[11px] text-[#F5E9CC]/50 pt-1 italic">
+              Note: Service hours may vary. Please contact the center for the latest schedule.
+            </p>
+          </div>
+
+          <p className="opacity-80 text-xs">
+            📍 2800 Douglas Road, Unit E, Burnaby, B.C. V5C 5B7, Canada
+          </p>
+
+          <p className="opacity-80 text-xs">
+            📞 <a href="tel:+16045682867" className="hover:text-white underline decoration-[#C09040]/50">+1 (604) 568-2867</a> · 
+            ✉️ <a href="mailto:info-can@worlddivinelight.org" className="hover:text-white ml-2 underline decoration-[#C09040]/50">info-can@worlddivinelight.org</a>
           </p>
 
           <p className="opacity-60 text-[11px] pt-1">
