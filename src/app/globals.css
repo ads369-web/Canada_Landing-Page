@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+:root {
+  --c-accent: #C09040;
+  --c-accent-ink: #14110C;
+  --c-bg: #FAF8F2;
+  --c-surface: #FFFFFF;
+  --c-ink: #2E2618;
+  --c-dark: #14110C;
+  --c-dark-ink: #F5E9CC;
+  --c-border: #E8E2D5;
+  --font-serif: var(--font-playfair), var(--font-shippori), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
+@theme inline {
+  --color-accent: #C09040;
+  --color-accent-ink: #14110C;
+  --color-bg: #FAF8F2;
+  --color-surface: #FFFFFF;
+  --color-ink: #2E2618;
+  --color-dark: #14110C;
+  --color-dark-ink: #F5E9CC;
+  --color-border: #E8E2D5;
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-playfair), var(--font-shippori), Georgia, serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--c-bg);
+  color: var(--c-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  line-height: 1.25;
+  color: var(--c-dark);
+  text-wrap: balance;
+}
+
+/* Card hover transition */
+.lp-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.lp-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(20, 17, 12, 0.06);
+}
