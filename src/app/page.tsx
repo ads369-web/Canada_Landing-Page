@@ -94,60 +94,60 @@ export default function Home() {
 
       {/* ================= 1. ヒーロー (HERO) ================= */}
       {/* Headline: Experience the Power of Spiritual Harmony. */}
-      <section className="relative overflow-hidden pt-16 pb-20 md:pt-24 md:pb-28 text-center bg-[#FAF8F2]">
+      <section className="relative overflow-hidden pt-20 pb-24 md:pt-32 md:pb-36 text-center">
         
-        {/* Subtle Ambient Background Image */}
-        <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
+        {/* Full Hero Photo Background with Light/Subtle Overlay */}
+        <div className="absolute inset-0 z-0">
           <Image 
             src="/assets/hero.jpg" 
             alt="Spiritual Harmony at Vancouver Spiritual Center" 
             fill 
-            className="object-cover" 
+            className="object-cover object-center" 
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#FAF8F2]/60 via-transparent to-[#FAF8F2]"></div>
+          {/* Light overlay so trees and sunlight are clear and vibrant */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/20 to-black/35"></div>
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6">
           
           {/* Eyebrow Pill */}
-          <div className="inline-block border border-[#C09040] text-[#C09040] rounded-full px-4 py-1 text-xs uppercase tracking-wider font-semibold mb-6 bg-white/70 backdrop-blur-sm">
-            Vancouver Spiritual Center · Burnaby, BC
+          <div className="inline-block border border-[#C09040]/70 text-[#F5E9CC] rounded-full px-5 py-1.5 text-xs uppercase tracking-wider font-semibold mb-6 bg-black/25 backdrop-blur-sm shadow-sm">
+            Federal Non-Profit Corporation in Canada
           </div>
 
           {/* Headline */}
-          <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#14110C] leading-[1.2] mb-6">
+          <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.15] mb-6 drop-shadow-md">
             Experience the Power of<br />
-            <span className="text-[#C09040] italic font-normal">Spiritual Harmony.</span>
+            Spiritual Harmony.
           </h1>
 
           {/* Subcopy */}
-          <div className="max-w-2xl mx-auto text-base sm:text-lg text-[#554C42] leading-relaxed mb-8">
-            <p className="mb-2">Welcome to our spiritual sanctuary in Burnaby.</p>
+          <div className="max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-white/95 leading-relaxed mb-8 drop-shadow">
             <p>
-              Release daily stress, find inner peace, and return to your original, luminous self through the gentle, non-contact practice of Divine Light.
+              From physical fatigue and daily stress to friction with loved ones, this gentle energy practice helps you unwind, reset, and reconnect with yourself.
             </p>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-5">
             <a 
               href="#booking" 
               className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-[#C09040] hover:bg-[#b08032] text-[#14110C] font-semibold text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
             >
-              Reserve Your Session
+              Experience the Power of Divine Light
             </a>
             <a 
-              href="sms:+16045682867&body=Hello%2C%20I%20would%20like%20to%20reserve%20a%20Divine%20Light%20session%20at%20the%20Vancouver%20Center." 
-              className="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3.5 rounded-full border border-[#C09040] text-[#C09040] hover:bg-[#C09040]/10 font-semibold text-sm transition-all bg-white/60"
+              href="tel:+16045682867" 
+              className="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3.5 rounded-full border border-[#C09040] text-[#F5E9CC] hover:bg-black/40 font-semibold text-sm transition-all bg-black/25 backdrop-blur-sm shadow-sm"
             >
-              SMS: (604) 568-2867
+              Call +1 (604) 568-2867
             </a>
           </div>
 
           {/* Micro Copy */}
-          <p className="text-xs text-[#7A6840] italic">
-            Free to attend. No pressure, ever.
+          <p className="text-xs sm:text-sm text-white/85 italic drop-shadow">
+            First visit is completely free. No obligation, no pressure.
           </p>
 
         </div>
@@ -432,16 +432,17 @@ export default function Home() {
       {/* ================= 7. スタッフ紹介 (YOUR HOSTS) ================= */}
       {/* Yui Takeda */}
       <section id="hosts" className="py-20 bg-[#FAF8F2]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           
-          <h2 className="font-serif text-2xl sm:text-4xl font-bold text-center text-[#14110C] mb-12">
+          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#14110C] mb-3">
             Your hosts
           </h2>
+          <div className="w-16 h-0.5 bg-[#C09040] mx-auto mb-10"></div>
 
-          <div className="bg-white border border-[#C09040]/25 rounded-2xl p-8 sm:p-10 text-center max-w-sm mx-auto shadow-sm">
+          <div className="max-w-lg mx-auto">
             
             {/* Host Image */}
-            <div className="relative w-36 h-36 mx-auto mb-5 rounded-full overflow-hidden border-2 border-[#C09040] shadow-md">
+            <div className="relative w-36 h-36 mx-auto mb-5 rounded-full overflow-hidden shadow-md border-2 border-[#C09040]/40">
               <Image 
                 src="/assets/staff_yui_takeda.jpg" 
                 alt="Yui Takeda" 
@@ -450,12 +451,20 @@ export default function Home() {
               />
             </div>
 
-            <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#14110C] mb-1">
+            <h3 className="font-serif text-2xl font-bold text-[#14110C] mb-1">
               Yui Takeda
             </h3>
-            <p className="text-xs uppercase tracking-wider font-semibold text-[#9E7422]">
+            <p className="text-xs sm:text-sm uppercase tracking-wider font-semibold text-[#7A6840] mb-6">
               Minister
             </p>
+
+            <div className="text-sm sm:text-base text-[#2E2618] leading-relaxed space-y-3">
+              <p>Welcome! My name is Yui Takeda.</p>
+              <p>
+                Having served as a minister for over a decade, I am dedicated to sharing our teachings, offering Divine Light, and supporting everyone in our community.
+              </p>
+              <p>I truly look forward to meeting you at our centre!</p>
+            </div>
 
           </div>
 
@@ -463,46 +472,76 @@ export default function Home() {
       </section>
 
       {/* ================= 8. よくある質問 (FAQ) ================= */}
-      {/* 3 Q&As from brief */}
-      <section id="faq" className="py-20 bg-white border-y border-[#E8E2D5]">
+      {/* Frequently asked questions - all items from LP Studio */}
+      <section id="faq" className="py-20 bg-[#FAF8F2] border-y border-[#E8E2D5]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           
-          <h2 className="font-serif text-2xl sm:text-4xl font-bold text-center text-[#14110C] mb-12">
-            Frequently asked questions
-          </h2>
+          <div className="text-center mb-10">
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#14110C] mb-3">
+              Frequently asked questions
+            </h2>
+            <div className="w-16 h-0.5 bg-[#C09040] mx-auto"></div>
+          </div>
 
           <div className="space-y-4">
             
-            {/* Q1 */}
-            <details className="bg-[#FAF8F2] border border-[#C09040]/25 rounded-2xl p-5 sm:p-6 shadow-sm [&_summary::-webkit-details-marker]:none" open>
-              <summary className="flex items-center justify-between cursor-pointer font-serif text-base sm:text-lg font-bold text-[#14110C]">
-                <span>Is this event really free?</span>
-                <span className="text-[#C09040] text-lg font-normal ml-3">▼</span>
+            {/* Item 1 */}
+            <details className="bg-white border border-[#E8E2D5] rounded-xl p-5 sm:p-6 shadow-sm [&_summary::-webkit-details-marker]:none" open>
+              <summary className="flex items-start justify-between cursor-pointer font-semibold text-sm sm:text-base text-[#14110C] gap-3">
+                <span>▼ Q: Is this event really free?</span>
               </summary>
-              <div className="mt-3 pt-3 border-t border-[#E8E2D5]/70 text-sm text-[#554C42] leading-relaxed">
-                There is no required fee. As a non-profit organization, love donations are purely optional and welcome.
+              <div className="mt-3 pt-3 border-t border-[#E8E2D5]/70 text-sm text-[#6C655E] leading-relaxed">
+                Please call or email us and we will be glad to help.
               </div>
             </details>
 
-            {/* Q2 */}
-            <details className="bg-[#FAF8F2] border border-[#C09040]/25 rounded-2xl p-5 sm:p-6 shadow-sm [&_summary::-webkit-details-marker]:none">
-              <summary className="flex items-center justify-between cursor-pointer font-serif text-base sm:text-lg font-bold text-[#14110C]">
-                <span>Do I need to belong to a specific religion or faith?</span>
-                <span className="text-[#C09040] text-lg font-normal ml-3">▼</span>
+            {/* Item 2 */}
+            <details className="bg-white border border-[#E8E2D5] rounded-xl p-5 sm:p-6 shadow-sm [&_summary::-webkit-details-marker]:none">
+              <summary className="flex items-start justify-between cursor-pointer font-semibold text-sm sm:text-base text-[#14110C] gap-3">
+                <span>▼ A: There is no required fee. As a non-profit organization, love donations are purely optional and welcome.</span>
               </summary>
-              <div className="mt-3 pt-3 border-t border-[#E8E2D5]/70 text-sm text-[#554C42] leading-relaxed">
-                Open to everyone — no prior background or spiritual experience needed.
+              <div className="mt-3 pt-3 border-t border-[#E8E2D5]/70 text-sm text-[#6C655E] leading-relaxed">
+                Please call or email us and we will be glad to help.
               </div>
             </details>
 
-            {/* Q3 */}
-            <details className="bg-[#FAF8F2] border border-[#C09040]/25 rounded-2xl p-5 sm:p-6 shadow-sm [&_summary::-webkit-details-marker]:none">
-              <summary className="flex items-center justify-between cursor-pointer font-serif text-base sm:text-lg font-bold text-[#14110C]">
-                <span>Is reservation required?</span>
-                <span className="text-[#C09040] text-lg font-normal ml-3">▼</span>
+            {/* Item 3 */}
+            <details className="bg-white border border-[#E8E2D5] rounded-xl p-5 sm:p-6 shadow-sm [&_summary::-webkit-details-marker]:none">
+              <summary className="flex items-start justify-between cursor-pointer font-semibold text-sm sm:text-base text-[#14110C] gap-3">
+                <span>▼ Q: Do I need to belong to a specific religion or faith?</span>
               </summary>
-              <div className="mt-3 pt-3 border-t border-[#E8E2D5]/70 text-sm text-[#554C42] leading-relaxed">
-                Yes, space is limited, so prior reservation is required.
+              <div className="mt-3 pt-3 border-t border-[#E8E2D5]/70 text-sm text-[#6C655E] leading-relaxed">
+                Please call or email us and we will be glad to help.
+              </div>
+            </details>
+
+            {/* Item 4 */}
+            <details className="bg-white border border-[#E8E2D5] rounded-xl p-5 sm:p-6 shadow-sm [&_summary::-webkit-details-marker]:none">
+              <summary className="flex items-start justify-between cursor-pointer font-semibold text-sm sm:text-base text-[#14110C] gap-3">
+                <span>▼ A: Open to everyone — no prior background or spiritual experience needed.</span>
+              </summary>
+              <div className="mt-3 pt-3 border-t border-[#E8E2D5]/70 text-sm text-[#6C655E] leading-relaxed">
+                Please call or email us and we will be glad to help.
+              </div>
+            </details>
+
+            {/* Item 5 */}
+            <details className="bg-white border border-[#E8E2D5] rounded-xl p-5 sm:p-6 shadow-sm [&_summary::-webkit-details-marker]:none">
+              <summary className="flex items-start justify-between cursor-pointer font-semibold text-sm sm:text-base text-[#14110C] gap-3">
+                <span>▼ Q: Is reservation required?</span>
+              </summary>
+              <div className="mt-3 pt-3 border-t border-[#E8E2D5]/70 text-sm text-[#6C655E] leading-relaxed">
+                Please call or email us and we will be glad to help.
+              </div>
+            </details>
+
+            {/* Item 6 */}
+            <details className="bg-white border border-[#E8E2D5] rounded-xl p-5 sm:p-6 shadow-sm [&_summary::-webkit-details-marker]:none">
+              <summary className="flex items-start justify-between cursor-pointer font-semibold text-sm sm:text-base text-[#14110C] gap-3">
+                <span>▼ A: Yes, space is limited, so prior reservation is required.</span>
+              </summary>
+              <div className="mt-3 pt-3 border-t border-[#E8E2D5]/70 text-sm text-[#6C655E] leading-relaxed">
+                Please call or email us and we will be glad to help.
               </div>
             </details>
 
@@ -673,7 +712,7 @@ export default function Home() {
               </div>
 
               {/* Map Embed */}
-              <div className="rounded-2xl overflow-hidden border border-white/10 h-56">
+              <div className="rounded-2xl overflow-hidden border border-white/10 h-56 relative group">
                 <iframe 
                   title="Vancouver Spiritual Center Location"
                   src="https://www.google.com/maps?q=2800%20Douglas%20Road%2C%20Unit%20E%2C%20Burnaby%2C%20B.C.%20V5C%205B7&output=embed"
@@ -683,6 +722,14 @@ export default function Home() {
                   loading="lazy" 
                   referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>
+                <a 
+                  href="https://maps.google.com/?q=2800+Douglas+Road+Unit+E+Burnaby+BC+V5C+5B7" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="absolute top-2.5 left-2.5 bg-white/90 hover:bg-white text-sky-700 px-3 py-1 rounded-lg text-xs font-semibold shadow-md backdrop-blur-sm transition-all flex items-center gap-1"
+                >
+                  Open in Maps ↗
+                </a>
               </div>
 
             </div>
@@ -693,51 +740,15 @@ export default function Home() {
       </section>
 
       {/* ================= 10. フッター (FOOTER) ================= */}
-      {/* (見出しなし) */}
-      <footer className="bg-[#0A0806] text-[#F5E9CC]/80 py-16 px-4 text-center text-xs">
-        <div className="max-w-4xl mx-auto space-y-4">
-          <p className="font-serif text-xl text-white font-bold tracking-wide">
+      {/* Minimal Footer (no duplicate dojo info) */}
+      <footer className="bg-[#0A0806] text-[#F5E9CC]/70 py-10 px-4 text-center text-xs">
+        <div className="max-w-4xl mx-auto space-y-2">
+          <p className="font-serif text-base sm:text-lg text-white font-bold tracking-wide">
             World Divine Light Organization
           </p>
-          <p className="text-[#C09040] font-medium text-sm">
-            Vancouver Spiritual Center (Burnaby)
-          </p>
-
-          {/* Operating Hours (開場時間) */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4 max-w-md mx-auto my-4 text-left sm:text-center space-y-1.5">
-            <p className="font-semibold text-xs tracking-wider uppercase text-[#C09040] mb-2">
-              Opening Hours / 開場時間
-            </p>
-            <p className="text-[#F5E9CC]/90 text-xs">
-              <strong>Tuesday – Friday:</strong> 12:00 PM – 7:00 PM
-            </p>
-            <p className="text-[#F5E9CC]/90 text-xs">
-              <strong>Saturday – Sunday:</strong> 10:00 AM – 4:00 PM
-            </p>
-            <p className="text-[#F5E9CC]/70 text-xs">
-              <strong>Monday:</strong> Closed
-            </p>
-            <p className="text-[11px] text-[#F5E9CC]/50 pt-1 italic">
-              Note: Service hours may vary. Please contact the center for the latest schedule.
-            </p>
-          </div>
-
-          <p className="opacity-80 text-xs">
-            📍 2800 Douglas Road, Unit E, Burnaby, B.C. V5C 5B7, Canada
-          </p>
-
-          <p className="opacity-80 text-xs">
-            📞 <a href="tel:+16045682867" className="hover:text-white underline decoration-[#C09040]/50">+1 (604) 568-2867</a> · 
-            ✉️ <a href="mailto:info-can@worlddivinelight.org" className="hover:text-white ml-2 underline decoration-[#C09040]/50">info-can@worlddivinelight.org</a>
-          </p>
-
-          <p className="opacity-60 text-[11px] pt-1">
-            Federal Non-Profit Corporation in Canada
-          </p>
-
-          <div className="pt-6 border-t border-white/10 text-[10px] opacity-40">
+          <p className="text-[11px] opacity-50">
             © 2026 Vancouver Spiritual Center · World Divine Light Organization. All Rights Reserved.
-          </div>
+          </p>
         </div>
       </footer>
 
