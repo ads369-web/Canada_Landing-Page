@@ -59,7 +59,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} ${shippori.variable} scroll-smooth`}>
-      <body className="antialiased selection:bg-[#C09040] selection:text-[#14110C] pb-16 md:pb-0">
+      <body className="antialiased selection:bg-[#810D41] selection:text-white pb-16 md:pb-0">
         {children}
       </body>
     </html>

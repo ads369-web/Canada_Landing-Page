@@ -1,27 +1,38 @@
 @import "tailwindcss";
 
 :root {
-  --c-accent: #C09040;
-  --c-accent-ink: #14110C;
-  --c-bg: #FAF8F2;
+  color-scheme: light;
+  --c-accent: #810D41;
+  --c-accent-hover: #640932;
+  --c-accent-ink: #FFFFFF;
+  --c-teal: #67C3BA;
+  --c-teal-deep: #4EA9A0;
+  --c-teal-ink: #0E1D1C;
+  --c-bg: #FDF4EC;
   --c-surface: #FFFFFF;
-  --c-ink: #2E2618;
-  --c-dark: #14110C;
-  --c-dark-ink: #F5E9CC;
-  --c-border: #E8E2D5;
+  --c-ink: #2B2522;
+  --c-muted: #524B47;
+  --c-dark: #0A0A0A;
+  --c-dark-ink: #F7F1EB;
+  --c-border: #EADFD5;
   --font-serif: var(--font-playfair), var(--font-shippori), Georgia, serif;
   --font-sans: var(--font-inter), system-ui, sans-serif;
 }
 
 @theme inline {
-  --color-accent: #C09040;
-  --color-accent-ink: #14110C;
-  --color-bg: #FAF8F2;
+  --color-accent: #810D41;
+  --color-accent-hover: #640932;
+  --color-accent-ink: #FFFFFF;
+  --color-teal: #67C3BA;
+  --color-teal-deep: #4EA9A0;
+  --color-teal-ink: #0E1D1C;
+  --color-bg: #FDF4EC;
   --color-surface: #FFFFFF;
-  --color-ink: #2E2618;
-  --color-dark: #14110C;
-  --color-dark-ink: #F5E9CC;
-  --color-border: #E8E2D5;
+  --color-ink: #2B2522;
+  --color-muted: #524B47;
+  --color-dark: #0A0A0A;
+  --color-dark-ink: #F7F1EB;
+  --color-border: #EADFD5;
 
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-serif: var(--font-playfair), var(--font-shippori), Georgia, serif;
@@ -40,8 +51,7 @@ body {
 
 h1, h2, h3, h4 {
   font-family: var(--font-serif);
-  line-height: 1.25;
-  color: var(--c-dark);
+  line-height: 1.2;
   text-wrap: balance;
 }
 
@@ -51,5 +61,65 @@ h1, h2, h3, h4 {
 }
 .lp-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(20, 17, 12, 0.06);
+  box-shadow: 0 10px 30px rgba(20, 17, 12, 0.06);
+}
+
+/* Accessible animated <details> accordion per modern-web-guidance */
+.faq-accordion details {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.faq-accordion details > summary {
+  list-style: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.faq-accordion details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-accordion details > summary::before {
+  content: "";
+  inline-size: 1.15em;
+  block-size: 1.15em;
+  margin-top: 0.2em;
+  flex-shrink: 0;
+  background-color: var(--c-teal);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat center / contain;
+  rotate: -90deg;
+}
+
+.faq-accordion details[open] > summary::before {
+  rotate: 0deg;
+}
+
+.faq-accordion details::details-content {
+  interpolate-size: allow-keywords;
+  overflow: clip;
+  contain: layout;
+}
+
+.faq-accordion details:not([open])::details-content {
+  block-size: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .faq-accordion details > summary::before {
+    transition: rotate 0.2s ease;
+  }
+  .faq-accordion details::details-content {
+    transition: block-size 0.3s ease-in-out, content-visibility 0.3s ease-in-out allow-discrete;
+  }
+}
+
+@media (forced-colors: active) {
+  .faq-accordion details > summary::before {
+    background-color: CanvasText;
+  }
+  .btn-primary-pill {
+    border: 2px solid ButtonText;
+  }
 }
