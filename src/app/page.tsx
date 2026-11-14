@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { TRANSLATIONS, type Lang } from "@/lib/translations";
 
 export default function Home() {
+  const [lang, setLang] = useState<Lang>("en");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -14,6 +16,38 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
 
+  // Sync language with URL query parameter (?lang=ja) or localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const urlLang = params.get("lang") as Lang | null;
+      if (urlLang === "ja" || urlLang === "en") {
+        setLang(urlLang);
+        return;
+      }
+      const saved = localStorage.getItem("wdl_canada_lang") as Lang | null;
+      if (saved === "ja" || saved === "en") {
+        setLang(saved);
+      }
+    }
+  }, []);
+
+  const switchLanguage = (newLang: Lang) => {
+    setLang(newLang);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("wdl_canada_lang", newLang);
+      const url = new URL(window.location.href);
+      if (newLang === "en") {
+        url.searchParams.delete("lang");
+      } else {
+        url.searchParams.set("lang", newLang);
+      }
+      window.history.replaceState({}, "", url.toString());
+    }
+  };
+
+  const t = TRANSLATIONS[lang];
+
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -23,7 +57,7 @@ export default function Home() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, language: lang }),
       });
 
       if (res.ok) {
@@ -43,47 +77,76 @@ export default function Home() {
     <div className="min-h-screen bg-[#FDF4EC] text-[#2B2522]">
 
       {/* ================= HEADER & NAVIGATION ================= */}
-      <header className="sticky top-0 z-50 bg-[#FDF4EC]/95 backdrop-blur-md border-b border-[#EADFD5] px-4 sm:px-6 py-3 transition-all">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+      <header className="sticky top-0 z-50 bg-[#FDF4EC]/95 backdrop-blur-md border-b border-[#EADFD5] px-3 sm:px-6 py-2.5 sm:py-3 transition-all">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-3 sm:gap-4">
           
           {/* Brand */}
-          <a href="#" className="flex items-center gap-3 group shrink-0">
+          <a href="#" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
             <Image 
               src="/assets/wdl_logo.png" 
               alt="World Divine Light" 
               width={110} 
               height={40} 
-              className="h-9 sm:h-10 w-auto object-contain shrink-0" 
+              className="h-8 sm:h-10 w-auto object-contain shrink-0" 
               priority
             />
-            <div className="border-l border-[#EADFD5] pl-3 flex flex-col justify-center">
-              <span className="block font-serif font-bold text-sm sm:text-base text-[#810D41] group-hover:text-[#640932] leading-tight whitespace-nowrap transition-colors">
-                Vancouver Spiritual Center
+            <div className="border-l border-[#EADFD5] pl-2.5 sm:pl-3 flex flex-col justify-center">
+              <span className="block font-serif font-bold text-xs sm:text-base text-[#810D41] group-hover:text-[#640932] leading-tight whitespace-nowrap transition-colors">
+                {t.header.title}
               </span>
-              <span className="block text-[11px] text-[#524B47] font-medium tracking-wide whitespace-nowrap">
-                World Divine Light (Canada)
+              <span className="block text-[10px] sm:text-[11px] text-[#524B47] font-medium tracking-wide whitespace-nowrap">
+                {t.header.org}
               </span>
             </div>
           </a>
 
           {/* Nav Links */}
           <nav aria-label="Main navigation" className="hidden xl:flex items-center gap-5 text-sm font-medium text-[#524B47] whitespace-nowrap">
-            <a href="#promises" className="hover:text-[#810D41] transition-colors">Promises</a>
-            <a href="#heart" className="hover:text-[#810D41] transition-colors">Our Heart</a>
-            <a href="#space" className="hover:text-[#810D41] transition-colors">Our Space</a>
-            <a href="#expect" className="hover:text-[#810D41] transition-colors">What to Expect</a>
-            <a href="#visit" className="hover:text-[#810D41] transition-colors">Before You Visit</a>
-            <a href="#hosts" className="hover:text-[#810D41] transition-colors">Your Hosts</a>
-            <a href="#faq" className="hover:text-[#810D41] transition-colors">FAQ</a>
+            <a href="#promises" className="hover:text-[#810D41] transition-colors">{t.header.nav.promises}</a>
+            <a href="#heart" className="hover:text-[#810D41] transition-colors">{t.header.nav.heart}</a>
+            <a href="#space" className="hover:text-[#810D41] transition-colors">{t.header.nav.space}</a>
+            <a href="#expect" className="hover:text-[#810D41] transition-colors">{t.header.nav.expect}</a>
+            <a href="#visit" className="hover:text-[#810D41] transition-colors">{t.header.nav.visit}</a>
+            <a href="#hosts" className="hover:text-[#810D41] transition-colors">{t.header.nav.hosts}</a>
+            <a href="#faq" className="hover:text-[#810D41] transition-colors">{t.header.nav.faq}</a>
           </nav>
 
-          {/* Top CTA */}
-          <div className="flex items-center gap-3 shrink-0">
+          {/* Top Actions: Language Switcher + Reservation CTA */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Language Toggle Pill */}
+            <div className="inline-flex items-center p-0.5 rounded-full border border-[#810D41]/30 bg-white/90 text-xs font-semibold shadow-2xs">
+              <button
+                type="button"
+                onClick={() => switchLanguage("en")}
+                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                  lang === "en"
+                    ? "bg-[#810D41] text-white shadow-xs"
+                    : "text-[#524B47] hover:text-[#1A1614]"
+                }`}
+                aria-label="Switch to English"
+              >
+                EN
+              </button>
+              <button
+                type="button"
+                onClick={() => switchLanguage("ja")}
+                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                  lang === "ja"
+                    ? "bg-[#810D41] text-white shadow-xs"
+                    : "text-[#524B47] hover:text-[#1A1614]"
+                }`}
+                aria-label="日本語で表示"
+              >
+                日本語
+              </button>
+            </div>
+
+            {/* Top CTA Button */}
             <a 
               href="#booking" 
-              className="btn-primary-pill inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-[#810D41] hover:bg-[#640932] text-white text-xs md:text-sm font-semibold whitespace-nowrap transition-all shadow-sm"
+              className="btn-primary-pill inline-flex items-center justify-center px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full bg-[#810D41] hover:bg-[#640932] text-white text-xs sm:text-sm font-semibold whitespace-nowrap transition-all shadow-sm"
             >
-              Reserve a Session
+              {t.header.cta}
             </a>
           </div>
 
@@ -102,13 +165,13 @@ export default function Home() {
           {/* Left: Editorial Copy & Plum Pill CTA */}
           <div className="lg:col-span-7 text-center lg:text-left">
             <div className="inline-block border border-[#810D41]/25 text-[#810D41] rounded-full px-4 py-1 text-xs uppercase tracking-wider font-semibold mb-6 bg-white/80">
-              Federal Non-Profit Corporation in Canada
+              {t.hero.badge}
             </div>
 
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#1A1614] leading-[1.12] mb-6 relative">
-              Experience the Power of{" "}
+            <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#1A1614] leading-[1.15] sm:leading-[1.12] mb-6 relative">
+              {t.hero.titleMain}
               <span className="relative inline-block">
-                Spiritual Harmony.
+                {t.hero.titleHighlight}
                 {/* Subtle hand-drawn radiance accent */}
                 <svg aria-hidden="true" className="hidden sm:inline-block absolute -top-5 -right-7 w-7 h-7 text-[#67C3BA]" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
                   <path d="M10 14L6 6M16 11V3M22 14L27 7" />
@@ -117,7 +180,7 @@ export default function Home() {
             </h1>
 
             <p className="max-w-xl mx-auto lg:mx-0 text-base sm:text-lg text-[#4A433E] leading-relaxed mb-8">
-              From physical fatigue and daily stress to friction with loved ones, this gentle energy practice helps you unwind, reset, and reconnect with yourself.
+              {t.hero.subtitle}
             </p>
 
             {/* Action Buttons */}
@@ -126,18 +189,18 @@ export default function Home() {
                 href="#booking" 
                 className="btn-primary-pill w-full sm:w-auto inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#810D41] hover:bg-[#640932] text-white font-semibold text-sm whitespace-nowrap transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
               >
-                Experience the Power of Divine Light
+                {t.hero.primaryCta}
               </a>
               <a 
                 href="tel:+16045682867" 
                 className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-full border border-[#1A1614]/25 text-[#1A1614] hover:bg-[#1A1614]/5 font-semibold text-sm whitespace-nowrap transition-all bg-white/70"
               >
-                Call +1 (604) 568-2867
+                {t.hero.phoneCta}
               </a>
             </div>
 
             <p className="text-xs sm:text-sm text-[#524B47] italic">
-              First visit is completely free. No obligation, no pressure.
+              {t.hero.microcopy}
             </p>
           </div>
 
@@ -146,7 +209,7 @@ export default function Home() {
             <div className="relative aspect-[16/11] w-full rounded-3xl overflow-hidden border-4 border-white shadow-xl bg-white">
               <Image 
                 src="/assets/hero.jpg" 
-                alt="Warm sunlight shining through forest trees representing Spiritual Harmony" 
+                alt={t.hero.imageAlt} 
                 fill 
                 className="object-cover object-center" 
                 priority
@@ -162,19 +225,19 @@ export default function Home() {
         <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-center md:justify-between gap-x-8 gap-y-2 text-xs sm:text-sm font-medium tracking-wide">
           <span className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#67C3BA]"></span>
-            Burnaby · Vancouver, BC
+            {t.trustStrip.location}
           </span>
           <span className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#67C3BA]"></span>
-            100% Free to Attend
+            {t.trustStrip.free}
           </span>
           <span className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#67C3BA]"></span>
-            Open to All Faiths
+            {t.trustStrip.allFaiths}
           </span>
           <span className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#67C3BA]"></span>
-            Prior Reservation Required
+            {t.trustStrip.reservation}
           </span>
         </div>
       </div>
@@ -184,7 +247,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-center text-[#1A1614] mb-14">
-            Three promises
+            {t.promises.title}
           </h2>
 
           <div className="grid md:grid-cols-3 gap-10 text-center mb-16">
@@ -196,9 +259,11 @@ export default function Home() {
                   <path d="M12 21s-7-4.35-9.5-8.5C.5 9.1 2.4 5 6.2 5c2.1 0 3.9 1.1 5.8 3.2C13.9 6.1 15.7 5 17.8 5 21.6 5 23.5 9.1 21.5 12.5 19 16.65 12 21 12 21z" fill="#67C3BA" fillOpacity="0.35" />
                 </svg>
               </div>
-              <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-2.5">Free to join</h3>
+              <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-2.5">
+                {t.promises.items[0].title}
+              </h3>
               <p className="text-sm text-[#524B47] leading-relaxed">
-                There is no required fee. As a non-profit organization, love donations are purely optional and welcome.
+                {t.promises.items[0].desc}
               </p>
             </div>
 
@@ -211,9 +276,11 @@ export default function Home() {
                   <path d="M12 10c4 0 7-3 7-7-4 0-7 3-7 7z" fill="#67C3BA" fillOpacity="0.25" />
                 </svg>
               </div>
-              <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-2.5">No pressure</h3>
+              <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-2.5">
+                {t.promises.items[1].title}
+              </h3>
               <p className="text-sm text-[#524B47] leading-relaxed">
-                No sales pitch, and no pressure to change your beliefs. Open to everyone — no prior background or spiritual experience needed.
+                {t.promises.items[1].desc}
               </p>
             </div>
 
@@ -225,9 +292,11 @@ export default function Home() {
                   <path d="M9.5 12l2 2 3.5-4" />
                 </svg>
               </div>
-              <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-2.5">Trusted &amp; safe</h3>
+              <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-2.5">
+                {t.promises.items[2].title}
+              </h3>
               <p className="text-sm text-[#524B47] leading-relaxed">
-                A Federal Non-Profit Corporation in Canada run by caring volunteers dedicated to the peace and well-being of the community.
+                {t.promises.items[2].desc}
               </p>
             </div>
 
@@ -239,7 +308,7 @@ export default function Home() {
               <path d="M10 14h4v6H8v-6c0-4 2-7 5-8M21 14h4v6h-6v-6c0-4 2-7 5-8" />
             </svg>
             <p className="font-serif text-lg sm:text-2xl text-[#1A1614] leading-snug">
-              A peaceful, multicultural spiritual family helping visitors improve life through Divine Light and universal principles.
+              {t.promises.callout}
             </p>
           </div>
 
@@ -257,13 +326,13 @@ export default function Home() {
           
           <div className="text-center mb-12">
             <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#0D1E1D] inline-flex items-center gap-2 mb-3">
-              Our heart
+              {t.heart.title}
               <svg aria-hidden="true" className="w-7 h-7 text-white shrink-0" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
                 <path d="M6 12L4 7M13 8V3M19 11L23 7" />
               </svg>
             </h2>
             <p className="font-serif text-lg sm:text-2xl text-[#0D1E1D]/90 italic">
-              Our Mission: Bringing Light and Harmony to Everyday Life
+              {t.heart.mission}
             </p>
           </div>
 
@@ -272,52 +341,33 @@ export default function Home() {
             {/* Left: Crisp White Card */}
             <div className="lg:col-span-6 bg-white rounded-3xl p-7 sm:p-10 shadow-lg border border-black/5">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FDF4EC] text-[#810D41] text-xs font-semibold uppercase tracking-wider mb-5">
-                Our Purpose
+                {t.heart.purposeBadge}
               </div>
               <p className="text-base sm:text-lg text-[#2B2522] leading-relaxed">
-                World Divine Light was established to help people regain their innermost heart of unconditional love, sincerity, and peace. We believe that the soul, mind, and body are deeply interconnected. When we purify and care for the spiritual source first, positive energy naturally flows down to revitalize our mind, body, and daily lives. Our purpose is to share this universal practice so that everyone can become &ldquo;people of light&rdquo;&mdash;bringing warmth, harmony, and well-being to their homes, workplaces, and communities.
+                {t.heart.purposeText}
               </p>
             </div>
 
             {/* Right: What You'll Experience stacked points in high-contrast ink */}
             <div className="lg:col-span-6 space-y-6">
               <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#0D1E1D]">
-                What You&rsquo;ll Experience
+                {t.heart.experienceTitle}
               </h3>
 
               <div className="space-y-5">
-                {/* Item 1 */}
-                <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-5 border border-[#0D1E1D]/10">
-                  <h4 className="font-serif text-lg font-bold text-[#0D1E1D] mb-1.5 flex items-center gap-2.5">
-                    <span className="w-6 h-6 rounded-full bg-[#810D41] text-white text-xs font-sans flex items-center justify-center shrink-0">1</span>
-                    Purifying Soul, Mind, and Body
-                  </h4>
-                  <p className="text-sm sm:text-base text-[#0E1D1C]/90 leading-relaxed pl-8">
-                    Based on the principle that spirit, mind, and body are connected, the Art of Divine Light purifies the spiritual aspect at its source, helping relieve fatigue and restore natural balance.
-                  </p>
-                </div>
-
-                {/* Item 2 */}
-                <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-5 border border-[#0D1E1D]/10">
-                  <h4 className="font-serif text-lg font-bold text-[#0D1E1D] mb-1.5 flex items-center gap-2.5">
-                    <span className="w-6 h-6 rounded-full bg-[#810D41] text-white text-xs font-sans flex items-center justify-center shrink-0">2</span>
-                    Learning Universal Laws with an Open Mind
-                  </h4>
-                  <p className="text-sm sm:text-base text-[#0E1D1C]/90 leading-relaxed pl-8">
-                    Discover universal principles that complement your existing values. People of all backgrounds and faiths are welcome with no need to convert.
-                  </p>
-                </div>
-
-                {/* Item 3 */}
-                <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-5 border border-[#0D1E1D]/10">
-                  <h4 className="font-serif text-lg font-bold text-[#0D1E1D] mb-1.5 flex items-center gap-2.5">
-                    <span className="w-6 h-6 rounded-full bg-[#810D41] text-white text-xs font-sans flex items-center justify-center shrink-0">3</span>
-                    Becoming &ldquo;People of Light&rdquo;
-                  </h4>
-                  <p className="text-sm sm:text-base text-[#0E1D1C]/90 leading-relaxed pl-8">
-                    Through purification and universal principles, cultivate inner positivity and bring warmth, clarity, and harmony into your home, work, and community.
-                  </p>
-                </div>
+                {t.heart.experiencePoints.map((item) => (
+                  <div key={item.num} className="bg-white/60 backdrop-blur-sm rounded-2xl p-5 border border-[#0D1E1D]/10">
+                    <h4 className="font-serif text-lg font-bold text-[#0D1E1D] mb-1.5 flex items-center gap-2.5">
+                      <span className="w-6 h-6 rounded-full bg-[#810D41] text-white text-xs font-sans flex items-center justify-center shrink-0">
+                        {item.num}
+                      </span>
+                      {item.title}
+                    </h4>
+                    <p className="text-sm sm:text-base text-[#0E1D1C]/90 leading-relaxed pl-8">
+                      {item.desc}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -337,10 +387,10 @@ export default function Home() {
               <path d="M20 4l2.5 5.5L28 12l-5.5 2.5L20 20l-2.5-5.5L12 12l5.5-2.5L20 4zM9 22l1.8 3.5L14.5 27l-3.7 1.5L9 32l-1.8-3.5L3.5 27l3.7-1.5L9 22zM30 22l1.8 3.5L35.5 27l-3.7 1.5L30 32l-1.8-3.5L24.5 27l3.7-1.5L30 22z" />
             </svg>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1614] mb-3">
-              Our space
+              {t.space.title}
             </h2>
             <p className="text-sm sm:text-base text-[#524B47] max-w-xl mx-auto">
-              A warm, welcoming sanctuary in Burnaby designed for peaceful Divine Light sessions and friendly fellowship.
+              {t.space.subtitle}
             </p>
           </div>
 
@@ -352,17 +402,17 @@ export default function Home() {
                 <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-[#F5ECE2]">
                   <Image 
                     src="/assets/dojo_session.jpg" 
-                    alt="Practitioners gently offering Divine Light in our Burnaby sanctuary" 
+                    alt={t.space.photos[0].alt} 
                     fill 
                     className="object-cover object-center group-hover:scale-[1.03] transition-transform duration-500" 
                   />
                 </div>
                 <figcaption className="pt-3 pb-1 px-2 flex items-center justify-between gap-2">
                   <span className="font-serif font-semibold text-sm sm:text-base text-[#1A1614]">
-                    Divine Light Sanctuary
+                    {t.space.photos[0].title}
                   </span>
                   <span className="text-xs text-[#810D41] font-medium">
-                    Seated &amp; Reclined Care
+                    {t.space.photos[0].sub}
                   </span>
                 </figcaption>
               </figure>
@@ -371,17 +421,17 @@ export default function Home() {
                 <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden bg-[#F5ECE2]">
                   <Image 
                     src="/assets/gallery_3.jpg" 
-                    alt="Quiet session chairs and peaceful table space" 
+                    alt={t.space.photos[1].alt} 
                     fill 
                     className="object-cover object-center group-hover:scale-[1.03] transition-transform duration-500" 
                   />
                 </div>
                 <figcaption className="pt-3 pb-1 px-2 flex items-center justify-between gap-2">
                   <span className="font-serif font-semibold text-sm sm:text-base text-[#1A1614]">
-                    Restful Session Area
+                    {t.space.photos[1].title}
                   </span>
                   <span className="text-xs text-[#524B47]">
-                    Clean &amp; Calm Setting
+                    {t.space.photos[1].sub}
                   </span>
                 </figcaption>
               </figure>
@@ -393,17 +443,17 @@ export default function Home() {
                 <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden bg-[#F5ECE2]">
                   <Image 
                     src="/assets/dojo_community.jpg" 
-                    alt="Visitors and center members chatting warmly around the table" 
+                    alt={t.space.photos[2].alt} 
                     fill 
                     className="object-cover object-center group-hover:scale-[1.03] transition-transform duration-500" 
                   />
                 </div>
                 <figcaption className="pt-3 pb-1 px-2 flex items-center justify-between gap-2">
                   <span className="font-serif font-semibold text-sm sm:text-base text-[#1A1614]">
-                    Warm Fellowship &amp; After-Talk
+                    {t.space.photos[2].title}
                   </span>
                   <span className="text-xs text-[#810D41] font-medium">
-                    Community Table
+                    {t.space.photos[2].sub}
                   </span>
                 </figcaption>
               </figure>
@@ -412,17 +462,17 @@ export default function Home() {
                 <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-[#F5ECE2]">
                   <Image 
                     src="/assets/gallery_2.jpg" 
-                    alt="Unit E doorway sign reading Divine Light SMBK-Canada" 
+                    alt={t.space.photos[3].alt} 
                     fill 
                     className="object-cover object-center group-hover:scale-[1.03] transition-transform duration-500" 
                   />
                 </div>
                 <figcaption className="pt-3 pb-1 px-2 flex items-center justify-between gap-2">
                   <span className="font-serif font-semibold text-sm sm:text-base text-[#1A1614]">
-                    Unit E Entrance Door
+                    {t.space.photos[3].title}
                   </span>
                   <span className="text-xs text-[#524B47]">
-                    2800 Douglas Rd, Burnaby
+                    {t.space.photos[3].sub}
                   </span>
                 </figcaption>
               </figure>
@@ -439,69 +489,32 @@ export default function Home() {
           
           <div className="text-center mb-12">
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1614] mb-3">
-              What to expect
+              {t.expect.title}
             </h2>
             <p className="text-sm sm:text-base text-[#524B47]">
-              Your first visit is relaxed, unhurried, and lasts under an hour.
+              {t.expect.subtitle}
             </p>
           </div>
 
           <div className="space-y-4">
-            
-            {/* Step 1 */}
-            <div className="bg-[#FDF4EC] border border-[#EADFD5] rounded-2xl p-6 sm:p-7 flex items-start gap-5">
-              <div className="w-12 h-12 rounded-full bg-[#810D41] text-white font-serif font-bold text-lg flex items-center justify-center shrink-0">
-                01
+            {t.expect.steps.map((st) => (
+              <div key={st.step} className="bg-[#FDF4EC] border border-[#EADFD5] rounded-2xl p-6 sm:p-7 flex items-start gap-5">
+                <div className="w-12 h-12 rounded-full bg-[#810D41] text-white font-serif font-bold text-lg flex items-center justify-center shrink-0">
+                  {st.step}
+                </div>
+                <div>
+                  <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-1.5 flex flex-wrap items-center gap-2.5">
+                    {st.title}
+                    <span className="text-xs font-sans font-semibold px-2.5 py-0.5 rounded-full bg-[#67C3BA]/30 text-[#0E1D1C]">
+                      {st.time}
+                    </span>
+                  </h3>
+                  <p className="text-sm sm:text-base text-[#524B47] leading-relaxed">
+                    {st.desc}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-1.5 flex flex-wrap items-center gap-2.5">
-                  Warm welcome
-                  <span className="text-xs font-sans font-semibold px-2.5 py-0.5 rounded-full bg-[#67C3BA]/30 text-[#0E1D1C]">
-                    about 10 min
-                  </span>
-                </h3>
-                <p className="text-sm sm:text-base text-[#524B47] leading-relaxed">
-                  Our staff greet you with a smile and a short introduction in a quiet room.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="bg-[#FDF4EC] border border-[#EADFD5] rounded-2xl p-6 sm:p-7 flex items-start gap-5">
-              <div className="w-12 h-12 rounded-full bg-[#810D41] text-white font-serif font-bold text-lg flex items-center justify-center shrink-0">
-                02
-              </div>
-              <div>
-                <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-1.5 flex flex-wrap items-center gap-2.5">
-                  The Divine Light session
-                  <span className="text-xs font-sans font-semibold px-2.5 py-0.5 rounded-full bg-[#67C3BA]/30 text-[#0E1D1C]">
-                    30 min
-                  </span>
-                </h3>
-                <p className="text-sm sm:text-base text-[#524B47] leading-relaxed">
-                  Sit comfortably, close your eyes and relax while the gentle Divine Light is transmitted.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="bg-[#FDF4EC] border border-[#EADFD5] rounded-2xl p-6 sm:p-7 flex items-start gap-5">
-              <div className="w-12 h-12 rounded-full bg-[#810D41] text-white font-serif font-bold text-lg flex items-center justify-center shrink-0">
-                03
-              </div>
-              <div>
-                <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-1.5 flex flex-wrap items-center gap-2.5">
-                  After talk
-                  <span className="text-xs font-sans font-semibold px-2.5 py-0.5 rounded-full bg-[#67C3BA]/30 text-[#0E1D1C]">
-                    about 10 min
-                  </span>
-                </h3>
-                <p className="text-sm sm:text-base text-[#524B47] leading-relaxed">
-                  After the session, we talk calmly about what you felt and any questions over a warm cup of tea.
-                </p>
-              </div>
-            </div>
-
+            ))}
           </div>
 
         </div>
@@ -512,44 +525,23 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-center text-[#1A1614] mb-12">
-            Before you visit
+            {t.visit.title}
           </h2>
 
           <div className="grid md:grid-cols-3 rounded-3xl border border-[#EADFD5] bg-[#FDF4EC]/40 overflow-hidden divide-y md:divide-y-0 md:divide-x divide-[#EADFD5]">
-            
-            {/* Attire */}
-            <div className="p-8 text-center">
-              <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-white border border-[#EADFD5] flex items-center justify-center text-2xl">
-                👕
+            {t.visit.items.map((it) => (
+              <div key={it.title} className="p-8 text-center">
+                <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-white border border-[#EADFD5] flex items-center justify-center text-2xl">
+                  {it.icon}
+                </div>
+                <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-3">
+                  {it.title}
+                </h3>
+                <p className="text-sm text-[#524B47] leading-relaxed">
+                  {it.desc}
+                </p>
               </div>
-              <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-3">Attire</h3>
-              <p className="text-sm text-[#524B47] leading-relaxed">
-                Casual is fine. Jeans and everyday clothes are completely OK. Clean socks are requested indoors.
-              </p>
-            </div>
-
-            {/* What to bring */}
-            <div className="p-8 text-center">
-              <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-white border border-[#EADFD5] flex items-center justify-center text-2xl">
-                🎒
-              </div>
-              <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-3">What to bring</h3>
-              <p className="text-sm text-[#524B47] leading-relaxed">
-                Nothing at all. Just come as you are.
-              </p>
-            </div>
-
-            {/* Parking */}
-            <div className="p-8 text-center">
-              <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-white border border-[#EADFD5] flex items-center justify-center text-2xl">
-                🚗
-              </div>
-              <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-3">Parking</h3>
-              <p className="text-sm text-[#524B47] leading-relaxed">
-                Convenient on-site parking is available directly outside Unit E at 2800 Douglas Road in Burnaby.
-              </p>
-            </div>
-
+            ))}
           </div>
 
         </div>
@@ -561,7 +553,7 @@ export default function Home() {
           
           <div className="text-center mb-12">
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1614] mb-3">
-              Your hosts
+              {t.hosts.title}
             </h2>
             <div className="w-16 h-0.5 bg-[#810D41] mx-auto"></div>
           </div>
@@ -572,7 +564,7 @@ export default function Home() {
             <div className="relative w-44 h-48 sm:w-52 sm:h-56 rounded-2xl overflow-hidden shrink-0 shadow-md border-2 border-[#67C3BA]/45 bg-[#F5F2EE]">
               <Image 
                 src="/assets/staff_yui_takeda.jpg" 
-                alt="Yui Takeda, Minister at Vancouver Spiritual Center" 
+                alt={`${t.hosts.name}, ${t.hosts.role}`} 
                 fill 
                 className="object-cover object-top" 
               />
@@ -581,21 +573,19 @@ export default function Home() {
             {/* Introduction */}
             <div className="text-center sm:text-left">
               <span className="inline-block px-3 py-0.5 rounded-full bg-[#67C3BA]/25 text-[#0E1D1C] text-[11px] font-semibold uppercase tracking-wider mb-3">
-                Meet Your Minister
+                {t.hosts.badge}
               </span>
               <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#1A1614] mb-1">
-                Yui Takeda
+                {t.hosts.name}
               </h3>
               <p className="text-xs uppercase tracking-widest font-semibold text-[#810D41] mb-5">
-                Minister
+                {t.hosts.role}
               </p>
 
               <div className="text-sm sm:text-base text-[#2B2522] leading-relaxed space-y-2.5">
-                <p>Welcome! My name is Yui Takeda.</p>
-                <p>
-                  Having served as a minister for over a decade, I am dedicated to sharing our teachings, offering Divine Light, and supporting everyone in our community.
-                </p>
-                <p>I truly look forward to meeting you at our centre!</p>
+                <p>{t.hosts.intro1}</p>
+                <p>{t.hosts.intro2}</p>
+                <p>{t.hosts.intro3}</p>
               </div>
             </div>
 
@@ -610,54 +600,33 @@ export default function Home() {
           
           <div className="text-center mb-12">
             <h2 id="faq-heading" className="font-serif text-3xl sm:text-4xl font-bold text-white mb-3">
-              Frequently asked questions
+              {t.faq.title}
             </h2>
             <div className="w-16 h-0.5 bg-[#67C3BA] mx-auto"></div>
           </div>
 
           <div className="border-t border-white/15">
-            
-            {/* Q1 */}
-            <details className="py-5" open>
-              <summary className="font-medium text-sm sm:text-base text-white">
-                <span>Q: Is this event really free?</span>
-              </summary>
-              <div className="mt-3 pl-6 text-sm text-[#D6D0CA] leading-relaxed">
-                A: There is no required fee. As a non-profit organization, love donations are purely optional and welcome.
-              </div>
-            </details>
-
-            {/* Q2 */}
-            <details className="py-5" open>
-              <summary className="font-medium text-sm sm:text-base text-white">
-                <span>Q: Do I need to belong to a specific religion or faith?</span>
-              </summary>
-              <div className="mt-3 pl-6 text-sm text-[#D6D0CA] leading-relaxed">
-                A: Open to everyone — no prior background or spiritual experience needed.
-              </div>
-            </details>
-
-            {/* Q3 */}
-            <details className="py-5" open>
-              <summary className="font-medium text-sm sm:text-base text-white">
-                <span>Q: Is reservation required?</span>
-              </summary>
-              <div className="mt-3 pl-6 text-sm text-[#D6D0CA] leading-relaxed">
-                A: Yes, space is limited, so prior reservation is required.
-              </div>
-            </details>
-
+            {t.faq.items.map((item, idx) => (
+              <details key={idx} className="py-5" open>
+                <summary className="font-medium text-sm sm:text-base text-white">
+                  <span>{item.q}</span>
+                </summary>
+                <div className="mt-3 pl-6 text-sm text-[#D6D0CA] leading-relaxed">
+                  {item.a}
+                </div>
+              </details>
+            ))}
           </div>
 
           <div className="text-center mt-10 space-y-4">
             <p className="text-sm text-[#C7C2BC]">
-              Please call or email us and we will be glad to help.
+              {t.faq.prompt}
             </p>
             <a 
               href="#booking" 
               className="inline-flex items-center justify-center px-7 py-3 rounded-full border border-white/30 hover:border-[#67C3BA] text-white text-sm font-medium transition-colors"
             >
-              Have more questions?
+              {t.faq.cta}
             </a>
           </div>
 
@@ -670,10 +639,10 @@ export default function Home() {
           
           <div className="text-center mb-12">
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3">
-              Experience the Power of Divine Light
+              {t.booking.heading}
             </h2>
             <p className="text-sm sm:text-base text-[#67C3BA] font-medium">
-              Hours: Tue - Fri 12:00 PM – 7:00 PM / Sat - Sun 10:00 AM – 4:00 PM (Mon Closed)
+              {t.booking.hours}
             </p>
           </div>
 
@@ -682,27 +651,27 @@ export default function Home() {
             {/* Reservation Form */}
             <div className="lg:col-span-7 bg-[#FDF4EC] text-[#1A1614] rounded-3xl p-6 sm:p-9 shadow-xl">
               <h3 className="font-serif text-2xl font-bold text-[#1A1614] mb-2">
-                Reserve Your Spot
+                {t.booking.form.title}
               </h3>
               <p className="text-xs sm:text-sm text-[#524B47] mb-6">
-                Please fill out this form to request a one-on-one session. There is no mandatory fee.
+                {t.booking.form.subtitle}
               </p>
 
               {submitStatus === "success" ? (
                 <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-2xl text-center">
                   <div className="text-3xl mb-2">✨</div>
                   <h4 className="font-serif font-bold text-emerald-800 text-lg mb-1">
-                    Reservation Request Sent!
+                    {t.booking.form.successTitle}
                   </h4>
                   <p className="text-xs text-emerald-700">
-                    Thank you for reaching out. We will contact you via email or phone shortly to confirm your session.
+                    {t.booking.form.successDesc}
                   </p>
                 </div>
               ) : (
                 <form onSubmit={handleBookingSubmit} className="space-y-4">
                   <div>
                     <label htmlFor="full-name" className="block text-xs font-semibold text-[#1A1614] mb-1">
-                      Full Name *
+                      {t.booking.form.fullNameLabel}
                     </label>
                     <input 
                       id="full-name"
@@ -710,7 +679,7 @@ export default function Home() {
                       required 
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Jane Doe" 
+                      placeholder={t.booking.form.fullNamePlaceholder} 
                       className="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD5] bg-white text-sm text-[#1A1614] focus:outline-none focus:border-[#810D41]"
                     />
                   </div>
@@ -718,7 +687,7 @@ export default function Home() {
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="email-addr" className="block text-xs font-semibold text-[#1A1614] mb-1">
-                        Email Address *
+                        {t.booking.form.emailLabel}
                       </label>
                       <input 
                         id="email-addr"
@@ -726,20 +695,21 @@ export default function Home() {
                         required 
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="jane@example.com" 
+                        placeholder={t.booking.form.emailPlaceholder} 
                         className="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD5] bg-white text-sm text-[#1A1614] focus:outline-none focus:border-[#810D41]"
                       />
                     </div>
                     <div>
+                      {/* Notice: Changed from "Phone (Call/SMS)" to "Phone Number" per landline restriction */}
                       <label htmlFor="phone-num" className="block text-xs font-semibold text-[#1A1614] mb-1">
-                        Phone (Call/SMS)
+                        {t.booking.form.phoneLabel}
                       </label>
                       <input 
                         id="phone-num"
                         type="tel" 
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="+1 (604) 000-0000" 
+                        placeholder={t.booking.form.phonePlaceholder} 
                         className="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD5] bg-white text-sm text-[#1A1614] focus:outline-none focus:border-[#810D41]"
                       />
                     </div>
@@ -747,7 +717,7 @@ export default function Home() {
 
                   <div>
                     <label htmlFor="pref-time" className="block text-xs font-semibold text-[#1A1614] mb-1">
-                      Preferred Date &amp; Time
+                      {t.booking.form.timeLabel}
                     </label>
                     <input 
                       id="pref-time"
@@ -760,14 +730,14 @@ export default function Home() {
 
                   <div>
                     <label htmlFor="notes" className="block text-xs font-semibold text-[#1A1614] mb-1">
-                      Questions or Notes
+                      {t.booking.form.notesLabel}
                     </label>
                     <textarea 
                       id="notes"
                       rows={3}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="Let us know if you have any questions..."
+                      placeholder={t.booking.form.notesPlaceholder}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD5] bg-white text-sm text-[#1A1614] focus:outline-none focus:border-[#810D41]"
                     ></textarea>
                   </div>
@@ -775,14 +745,14 @@ export default function Home() {
                   <button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="btn-primary-pill w-full py-3.5 px-6 rounded-full bg-[#810D41] hover:bg-[#640932] text-white font-semibold text-sm transition-all shadow-md disabled:opacity-50"
+                    className="btn-primary-pill w-full py-3.5 px-6 rounded-full bg-[#810D41] hover:bg-[#640932] text-white font-semibold text-sm transition-all shadow-md disabled:opacity-50 cursor-pointer"
                   >
-                    {isSubmitting ? "Sending Request..." : "Confirm Reservation Request"}
+                    {isSubmitting ? t.booking.form.submittingBtn : t.booking.form.submitBtn}
                   </button>
 
                   {submitStatus === "error" && (
                     <p className="text-xs text-rose-600 text-center">
-                      Failed to send request. Please try calling or texting us directly.
+                      {t.booking.form.errorMsg}
                     </p>
                   )}
                 </form>
@@ -795,42 +765,43 @@ export default function Home() {
               {/* Quick Contact Card */}
               <div className="bg-white/[0.04] border border-white/15 rounded-3xl p-6 text-sm">
                 <h4 className="font-serif font-bold text-white text-lg mb-3">
-                  Vancouver Spiritual Center (Burnaby)
+                  {t.booking.contactCard.title}
                 </h4>
                 <div className="space-y-2.5 text-[#E5DED7] text-xs sm:text-sm">
-                  <p>📍 <strong>Address:</strong> 2800 Douglas Road, Unit E, Burnaby, B.C. V5C 5B7</p>
-                  <p>🕒 <strong>Hours:</strong> Tue–Fri 12:00 PM – 7:00 PM / Sat–Sun 10:00 AM – 4:00 PM (Mon Closed)</p>
+                  <p>📍 <strong>{t.booking.contactCard.addressLabel}</strong> {t.booking.contactCard.addressVal}</p>
+                  <p>🕒 <strong>{t.booking.contactCard.hoursLabel}</strong> {t.booking.contactCard.hoursVal}</p>
                   <p>
-                    📞 <strong>Phone:</strong>{" "}
+                    📞 <strong>{t.booking.contactCard.phoneLabel}</strong>{" "}
                     <a href="tel:+16045682867" className="text-[#67C3BA] hover:underline font-medium">
                       +1 (604) 568-2867
                     </a>
                   </p>
                   <p>
-                    ✉️ <strong>Email:</strong>{" "}
+                    ✉️ <strong>{t.booking.contactCard.emailLabel}</strong>{" "}
                     <a href="mailto:info-can@worlddivinelight.org" className="text-[#67C3BA] hover:underline font-medium">
                       info-can@worlddivinelight.org
                     </a>
                   </p>
                 </div>
 
+                {/* Direct Action Buttons: Voice Call & Email (SMS removed due to landline restriction) */}
                 <div className="mt-5 pt-4 border-t border-white/15 flex gap-2.5">
                   <a 
                     href="tel:+16045682867" 
-                    className="btn-primary-pill flex-1 py-2.5 rounded-full bg-[#810D41] hover:bg-[#640932] text-white font-semibold text-xs text-center transition-all shadow-sm"
+                    className="btn-primary-pill flex-1 py-2.5 rounded-full bg-[#810D41] hover:bg-[#640932] text-white font-semibold text-xs text-center transition-all shadow-sm flex items-center justify-center gap-1.5"
                   >
-                    Call Directly
+                    {t.booking.contactCard.callBtn}
                   </a>
                   <a 
-                    href="sms:+16045682867&body=Hello%2C%20I%20would%20like%20to%20reserve%20a%20Divine%20Light%20session." 
-                    className="flex-1 py-2.5 rounded-full border border-[#67C3BA] text-[#67C3BA] hover:bg-[#67C3BA]/10 font-semibold text-xs text-center transition-all"
+                    href="mailto:info-can@worlddivinelight.org" 
+                    className="flex-1 py-2.5 rounded-full border border-[#67C3BA] text-[#67C3BA] hover:bg-[#67C3BA]/10 font-semibold text-xs text-center transition-all flex items-center justify-center gap-1.5"
                   >
-                    Text (SMS)
+                    {t.booking.contactCard.emailBtn}
                   </a>
                 </div>
 
                 <p className="text-[11px] text-white/55 mt-4 pt-3 border-t border-white/10 text-center">
-                  Federal Non-Profit Corporation in Canada
+                  {t.booking.contactCard.badge}
                 </p>
               </div>
 
@@ -851,7 +822,7 @@ export default function Home() {
                   rel="noopener noreferrer" 
                   className="absolute top-3 left-3 bg-white/95 hover:bg-white text-[#1A1614] px-3 py-1.5 rounded-full text-xs font-semibold shadow-md backdrop-blur-sm transition-all flex items-center gap-1"
                 >
-                  Open in Maps ↗
+                  {t.booking.contactCard.mapBtn}
                 </a>
               </div>
 
@@ -866,27 +837,28 @@ export default function Home() {
       <footer className="bg-[#050505] text-[#F7F1EB]/70 py-10 px-4 text-center text-xs border-t border-white/10">
         <div className="max-w-4xl mx-auto space-y-2">
           <p className="font-serif text-base sm:text-lg text-white font-bold tracking-wide">
-            World Divine Light Organization
+            {t.footer.org}
           </p>
           <p className="text-[11px] text-white/45">
-            © 2026 Vancouver Spiritual Center · World Divine Light Organization. All Rights Reserved.
+            {t.footer.copyright}
           </p>
         </div>
       </footer>
 
       {/* ================= MOBILE STICKY BOTTOM BAR ================= */}
+      {/* Notice: Changed from SMS Us to Call Us per landline restriction */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FDF4EC]/95 backdrop-blur-md border-t border-[#EADFD5] px-4 py-2.5 flex items-center gap-2.5">
         <a 
-          href="sms:+16045682867&body=Hello%2C%20I%20would%20like%20to%20reserve%20a%20Divine%20Light%20session%20at%20the%20Vancouver%20Center." 
-          className="flex-1 py-2.5 rounded-full border border-[#810D41]/35 text-[#810D41] text-center text-xs font-semibold bg-white/80"
+          href="tel:+16045682867" 
+          className="flex-1 py-2.5 rounded-full border border-[#810D41]/35 text-[#810D41] text-center text-xs font-semibold bg-white/80 flex items-center justify-center gap-1"
         >
-          💬 SMS Us
+          {t.mobileBar.callBtn}
         </a>
         <a 
           href="#booking" 
           className="btn-primary-pill flex-[2] py-2.5 rounded-full bg-[#810D41] text-white text-center text-xs font-semibold shadow-sm"
         >
-          Reserve a Session
+          {t.mobileBar.reserveBtn}
         </a>
       </div>
 
