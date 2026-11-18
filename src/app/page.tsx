@@ -32,6 +32,16 @@ export default function Home() {
     }
   }, []);
 
+  // Sync document title with active language
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.title =
+        lang === "ja"
+          ? "心と体の調和を取り戻す、お浄めの体験 | バンクーバー道場（バーナビー）"
+          : "Experience the Power of Spiritual Harmony | Vancouver Spiritual Center";
+    }
+  }, [lang]);
+
   const switchLanguage = (newLang: Lang) => {
     setLang(newLang);
     if (typeof window !== "undefined") {
@@ -47,6 +57,25 @@ export default function Home() {
   };
 
   const t = TRANSLATIONS[lang];
+
+  // Scroll reveal IntersectionObserver (Inspired by yama-niwa & Sanga)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-revealed");
+          }
+        });
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    const items = document.querySelectorAll(".reveal-item");
+    items.forEach((item) => observer.observe(item));
+
+    return () => observer.disconnect();
+  }, [lang]);
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,11 +103,11 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDF4EC] text-[#2B2522]">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#1C1917] selection:bg-[#7A1A3A] selection:text-white overflow-x-hidden">
 
-      {/* ================= HEADER & NAVIGATION ================= */}
-      <header className="sticky top-0 z-50 bg-[#FDF4EC]/95 backdrop-blur-md border-b border-[#EADFD5] px-3 sm:px-6 py-2.5 sm:py-3 transition-all">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-3 sm:gap-4">
+      {/* ================= HEADER & NAVIGATION (QUIET SANCTUARY BAR) ================= */}
+      <header className="sticky top-0 z-50 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#1C1917]/10 px-4 sm:px-6 2xl:px-8 py-3.5 transition-all">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
           
           {/* Brand */}
           <a href="#" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
@@ -87,41 +116,41 @@ export default function Home() {
               alt="World Divine Light" 
               width={110} 
               height={40} 
-              className="h-8 sm:h-10 w-auto object-contain shrink-0" 
+              className="h-7 sm:h-9 w-auto object-contain shrink-0 opacity-90 group-hover:opacity-100 transition-opacity" 
               priority
             />
-            <div className="border-l border-[#EADFD5] pl-2.5 sm:pl-3 flex flex-col justify-center">
-              <span className="block font-serif font-bold text-xs sm:text-base text-[#810D41] group-hover:text-[#640932] leading-tight whitespace-nowrap transition-colors">
+            <div className="border-l border-[#1C1917]/15 pl-2.5 sm:pl-3 flex flex-col justify-center">
+              <span className="block font-serif font-bold text-xs sm:text-sm tracking-wide text-[#7A1A3A] leading-tight whitespace-nowrap">
                 {t.header.title}
               </span>
-              <span className="block text-[10px] sm:text-[11px] text-[#524B47] font-medium tracking-wide whitespace-nowrap">
+              <span className="block text-[10px] sm:text-[11px] text-[#6B645C] font-sans font-medium tracking-wider uppercase whitespace-nowrap">
                 {t.header.org}
               </span>
             </div>
           </a>
 
-          {/* Nav Links */}
-          <nav aria-label="Main navigation" className="hidden xl:flex items-center gap-5 text-sm font-medium text-[#524B47] whitespace-nowrap">
-            <a href="#promises" className="hover:text-[#810D41] transition-colors">{t.header.nav.promises}</a>
-            <a href="#heart" className="hover:text-[#810D41] transition-colors">{t.header.nav.heart}</a>
-            <a href="#space" className="hover:text-[#810D41] transition-colors">{t.header.nav.space}</a>
-            <a href="#expect" className="hover:text-[#810D41] transition-colors">{t.header.nav.expect}</a>
-            <a href="#visit" className="hover:text-[#810D41] transition-colors">{t.header.nav.visit}</a>
-            <a href="#hosts" className="hover:text-[#810D41] transition-colors">{t.header.nav.hosts}</a>
-            <a href="#faq" className="hover:text-[#810D41] transition-colors">{t.header.nav.faq}</a>
+          {/* Editorial Nav Links */}
+          <nav aria-label="Main navigation" className="hidden xl:flex items-center gap-3.5 2xl:gap-6 text-[11px] 2xl:text-xs tracking-wider uppercase font-sans font-medium text-[#6B645C] whitespace-nowrap">
+            <a href="#promises" className="hover:text-[#7A1A3A] transition-colors">{t.header.nav.promises}</a>
+            <a href="#heart" className="hover:text-[#7A1A3A] transition-colors">{t.header.nav.heart}</a>
+            <a href="#space" className="hover:text-[#7A1A3A] transition-colors">{t.header.nav.space}</a>
+            <a href="#expect" className="hover:text-[#7A1A3A] transition-colors">{t.header.nav.expect}</a>
+            <a href="#visit" className="hover:text-[#7A1A3A] transition-colors">{t.header.nav.visit}</a>
+            <a href="#hosts" className="hover:text-[#7A1A3A] transition-colors">{t.header.nav.hosts}</a>
+            <a href="#faq" className="hover:text-[#7A1A3A] transition-colors">{t.header.nav.faq}</a>
           </nav>
 
-          {/* Top Actions: Language Switcher + Reservation CTA */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Language Toggle Pill */}
-            <div className="inline-flex items-center p-0.5 rounded-full border border-[#810D41]/30 bg-white/90 text-xs font-semibold shadow-2xs">
+          {/* Right Actions: Segmented Language Switcher + Reservation CTA */}
+          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+            {/* Language Switcher Pill */}
+            <div className="inline-flex items-center p-0.5 rounded-full border border-[#1C1917]/15 bg-white/80 text-[11px] font-medium shadow-2xs">
               <button
                 type="button"
                 onClick={() => switchLanguage("en")}
-                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                className={`px-2.5 py-1 rounded-full transition-all duration-200 cursor-pointer ${
                   lang === "en"
-                    ? "bg-[#810D41] text-white shadow-xs"
-                    : "text-[#524B47] hover:text-[#1A1614]"
+                    ? "bg-[#7A1A3A] text-white shadow-2xs font-semibold"
+                    : "text-[#6B645C] hover:text-[#1C1917]"
                 }`}
                 aria-label="Switch to English"
               >
@@ -130,10 +159,10 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => switchLanguage("ja")}
-                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                className={`px-2.5 py-1 rounded-full transition-all duration-200 cursor-pointer ${
                   lang === "ja"
-                    ? "bg-[#810D41] text-white shadow-xs"
-                    : "text-[#524B47] hover:text-[#1A1614]"
+                    ? "bg-[#7A1A3A] text-white shadow-2xs font-semibold"
+                    : "text-[#6B645C] hover:text-[#1C1917]"
                 }`}
                 aria-label="日本語で表示"
               >
@@ -141,10 +170,10 @@ export default function Home() {
               </button>
             </div>
 
-            {/* Top CTA Button */}
+            {/* Top Ghost/Pill CTA */}
             <a 
               href="#booking" 
-              className="btn-primary-pill inline-flex items-center justify-center px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full bg-[#810D41] hover:bg-[#640932] text-white text-xs sm:text-sm font-semibold whitespace-nowrap transition-all shadow-sm"
+              className="hidden sm:inline-flex items-center justify-center px-4 2xl:px-5 py-2 rounded-full bg-[#7A1A3A] hover:bg-[#5E122B] text-white text-[11px] 2xl:text-xs tracking-wider uppercase font-medium whitespace-nowrap transition-all shadow-sm hover:shadow"
             >
               {t.header.cta}
             </a>
@@ -153,67 +182,77 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ================= 1. HERO (SOFT PEACH CREAM + ORGANIC MINT ACCENTS + LUMINOUS PHOTO) ================= */}
-      <section className="relative overflow-hidden pt-12 pb-16 md:pt-20 md:pb-24 bg-[#FDF4EC]">
+      {/* ================= 1. CINEMATIC SANCTUARY HERO (SANGA & YAMA-NIWA STYLE) ================= */}
+      {/* Released from the "AI card" box: Expansive, atmospheric, majestic morning light */}
+      <section className="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden">
         
-        {/* Subtle organic pastel mint shapes matching Mi&u atmosphere */}
-        <div aria-hidden="true" className="pointer-events-none absolute -top-24 -left-24 w-96 h-96 rounded-full bg-[#67C3BA]/15 blur-2xl"></div>
-        <div aria-hidden="true" className="pointer-events-none absolute -bottom-24 right-0 w-[28rem] h-[28rem] rounded-full bg-[#67C3BA]/12 blur-2xl"></div>
-
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           
-          {/* Left: Editorial Copy & Plum Pill CTA */}
-          <div className="lg:col-span-7 text-center lg:text-left">
-            <div className="inline-block border border-[#810D41]/25 text-[#810D41] rounded-full px-4 py-1 text-xs uppercase tracking-wider font-semibold mb-6 bg-white/80">
+          {/* Eyebrow & Lead Header */}
+          <div className="text-center max-w-4xl mx-auto reveal-item">
+            <span className="inline-block text-[11px] sm:text-xs uppercase tracking-[0.25em] text-[#7A1A3A] font-semibold mb-5 font-sans">
               {t.hero.badge}
-            </div>
+            </span>
 
-            <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#1A1614] leading-[1.15] sm:leading-[1.12] mb-6 relative">
+            <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#1C1917] leading-[1.14] mb-6">
               {t.hero.titleMain}
-              <span className="relative inline-block">
+              <span className="italic font-normal block sm:inline text-[#7A1A3A]">
                 {t.hero.titleHighlight}
-                {/* Subtle hand-drawn radiance accent */}
-                <svg aria-hidden="true" className="hidden sm:inline-block absolute -top-5 -right-7 w-7 h-7 text-[#67C3BA]" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-                  <path d="M10 14L6 6M16 11V3M22 14L27 7" />
-                </svg>
               </span>
             </h1>
 
-            <p className="max-w-xl mx-auto lg:mx-0 text-base sm:text-lg text-[#4A433E] leading-relaxed mb-8">
+            <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#6B645C] leading-relaxed mb-8 font-serif">
               {t.hero.subtitle}
             </p>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row flex-wrap items-center lg:justify-start justify-center gap-3.5 mb-5">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-4">
               <a 
                 href="#booking" 
-                className="btn-primary-pill w-full sm:w-auto inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#810D41] hover:bg-[#640932] text-white font-semibold text-sm whitespace-nowrap transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-[#7A1A3A] hover:bg-[#5E122B] text-white font-medium text-xs sm:text-sm tracking-wider uppercase whitespace-nowrap transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
               >
                 {t.hero.primaryCta}
               </a>
               <a 
                 href="tel:+16045682867" 
-                className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-full border border-[#1A1614]/25 text-[#1A1614] hover:bg-[#1A1614]/5 font-semibold text-sm whitespace-nowrap transition-all bg-white/70"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3.5 rounded-full border border-[#1C1917]/20 hover:border-[#7A1A3A] text-[#1C1917] hover:bg-[#7A1A3A]/5 font-medium text-xs sm:text-sm tracking-wide whitespace-nowrap transition-all bg-white/60"
               >
                 {t.hero.phoneCta}
               </a>
             </div>
 
-            <p className="text-xs sm:text-sm text-[#524B47] italic">
+            <p className="text-xs text-[#8C827A] italic font-serif">
               {t.hero.microcopy}
             </p>
           </div>
 
-          {/* Right: Crisp Framed Sanctuary Image */}
-          <div className="lg:col-span-5">
-            <div className="relative aspect-[16/11] w-full rounded-3xl overflow-hidden border-4 border-white shadow-xl bg-white">
+          {/* Expansive Panoramic Visual — NOT inside an AI card */}
+          <div className="mt-12 sm:mt-16 reveal-item delay-200">
+            <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl bg-[#E8E2D8]">
               <Image 
                 src="/assets/hero.jpg" 
                 alt={t.hero.imageAlt} 
                 fill 
-                className="object-cover object-center" 
+                className="object-cover object-center scale-[1.01]" 
                 priority
               />
+              {/* Soft atmospheric gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
+              
+              {/* Subtle caption overlaid on the morning landscape */}
+              <div className="absolute bottom-4 left-5 sm:bottom-6 sm:left-8 text-white/90 text-xs sm:text-sm font-serif italic tracking-wide">
+                {t.hero.caption}
+              </div>
+            </div>
+          </div>
+
+          {/* Sanga & yama-niwa Scroll Indicator */}
+          <div className="mt-12 flex flex-col items-center justify-center gap-2 reveal-item delay-300">
+            <span className="text-[10px] tracking-[0.25em] uppercase text-[#8C827A] font-medium font-sans">
+              SCROLL
+            </span>
+            <div className="w-[1px] h-10 bg-[#1C1917]/15 overflow-hidden">
+              <div className="w-full h-full bg-[#7A1A3A] animate-scroll-line"></div>
             </div>
           </div>
 
@@ -221,93 +260,112 @@ export default function Home() {
       </section>
 
       {/* ================= DARK SANCTUARY TRUST STRIP ================= */}
-      <div className="bg-[#0A0A0A] text-[#F7F1EB] py-5 px-4 sm:px-6 border-y border-white/10">
-        <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-center md:justify-between gap-x-8 gap-y-2 text-xs sm:text-sm font-medium tracking-wide">
+      <div className="bg-[#141312] text-[#FAF7F2] py-4 sm:py-5 px-4 sm:px-8 border-y border-white/10">
+        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-center sm:justify-between gap-x-8 gap-y-2.5 text-xs tracking-wider uppercase font-sans font-medium text-white/75">
           <span className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#67C3BA]"></span>
+            <span className="text-[#4A6B5D]">◇</span>
             {t.trustStrip.location}
           </span>
           <span className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#67C3BA]"></span>
+            <span className="text-[#4A6B5D]">◇</span>
             {t.trustStrip.free}
           </span>
           <span className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#67C3BA]"></span>
+            <span className="text-[#4A6B5D]">◇</span>
             {t.trustStrip.allFaiths}
           </span>
           <span className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#67C3BA]"></span>
+            <span className="text-[#4A6B5D]">◇</span>
             {t.trustStrip.reservation}
           </span>
         </div>
       </div>
 
-      {/* ================= 2. THREE PROMISES + QUOTE CALLOUT (CRISP WHITE CANVAS) ================= */}
-      <section id="promises" className="py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+      {/* ================= 2. THREE PROMISES (EDITORIAL MINIMALIST LAYOUT) ================= */}
+      {/* Replaced generic AI cards & mint fills with bespoke fine-line emblems & architectural dividers */}
+      <section id="promises" className="py-24 sm:py-32 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           
-          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-center text-[#1A1614] mb-14">
-            {t.promises.title}
-          </h2>
+          <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 reveal-item">
+            <span className="text-[11px] uppercase tracking-[0.25em] text-[#7A1A3A] font-semibold block mb-3 font-sans">
+              {t.promises.badge}
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1C1917]">
+              {t.promises.title}
+            </h2>
+            <div className="w-10 h-[1.5px] bg-[#7A1A3A] mx-auto mt-5"></div>
+          </div>
 
-          <div className="grid md:grid-cols-3 gap-10 text-center mb-16">
+          {/* 3 Editorial Columns with Hairline Dividers */}
+          <div className="grid md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#1C1917]/10 mb-20">
             
-            {/* Promise 1 */}
-            <div className="px-2">
-              <div className="w-14 h-14 mx-auto mb-5 flex items-center justify-center rounded-2xl bg-[#FDF4EC] border border-[#EADFD5]">
-                <svg aria-hidden="true" className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#1A1614" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 21s-7-4.35-9.5-8.5C.5 9.1 2.4 5 6.2 5c2.1 0 3.9 1.1 5.8 3.2C13.9 6.1 15.7 5 17.8 5 21.6 5 23.5 9.1 21.5 12.5 19 16.65 12 21 12 21z" fill="#67C3BA" fillOpacity="0.35" />
-                </svg>
+            {/* Promise 1 — Open hand cradling light */}
+            <div className="py-8 md:py-4 px-6 md:px-8 reveal-item delay-100">
+              <div className="mb-6 flex items-center justify-between">
+                <span className="font-serif text-2xl text-[#7A1A3A]/40 font-bold">I</span>
+                <div className="w-12 h-12 rounded-full bg-[#FAF7F2] border border-[#1C1917]/10 flex items-center justify-center text-[#7A1A3A]">
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M12 3v3m0 12v3M3 12h3m12 0h3" />
+                    <path d="M5.6 5.6l2.1 2.1m8.6 8.6l2.1 2.1M5.6 18.4l2.1-2.1m8.6-8.6l2.1-2.1" opacity="0.6" />
+                  </svg>
+                </div>
               </div>
-              <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-2.5">
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#1C1917] mb-3">
                 {t.promises.items[0].title}
               </h3>
-              <p className="text-sm text-[#524B47] leading-relaxed">
+              <p className="text-sm sm:text-base text-[#6B645C] leading-relaxed font-sans">
                 {t.promises.items[0].desc}
               </p>
             </div>
 
-            {/* Promise 2 */}
-            <div className="px-2">
-              <div className="w-14 h-14 mx-auto mb-5 flex items-center justify-center rounded-2xl bg-[#FDF4EC] border border-[#EADFD5]">
-                <svg aria-hidden="true" className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#1A1614" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22v-9" />
-                  <path d="M12 13c-4 0-7-3-7-7 4 0 7 3 7 7z" fill="#67C3BA" fillOpacity="0.4" />
-                  <path d="M12 10c4 0 7-3 7-7-4 0-7 3-7 7z" fill="#67C3BA" fillOpacity="0.25" />
-                </svg>
+            {/* Promise 2 — Lotus / Ripple of peace & no pressure */}
+            <div className="py-8 md:py-4 px-6 md:px-8 reveal-item delay-200">
+              <div className="mb-6 flex items-center justify-between">
+                <span className="font-serif text-2xl text-[#7A1A3A]/40 font-bold">II</span>
+                <div className="w-12 h-12 rounded-full bg-[#FAF7F2] border border-[#1C1917]/10 flex items-center justify-center text-[#7A1A3A]">
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 4c-2.5 4-3.5 8-3.5 13 2-1 4.5-1 7 0 0-5-1-9-3.5-13z" />
+                    <path d="M8.5 17c-3-1.5-5.5-4.5-6.5-8.5 3 0 6 2 7.5 5.5" opacity="0.7" />
+                    <path d="M15.5 17c3-1.5 5.5-4.5 6.5-8.5-3 0-6 2-7.5 5.5" opacity="0.7" />
+                  </svg>
+                </div>
               </div>
-              <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-2.5">
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#1C1917] mb-3">
                 {t.promises.items[1].title}
               </h3>
-              <p className="text-sm text-[#524B47] leading-relaxed">
+              <p className="text-sm sm:text-base text-[#6B645C] leading-relaxed font-sans">
                 {t.promises.items[1].desc}
               </p>
             </div>
 
-            {/* Promise 3 */}
-            <div className="px-2">
-              <div className="w-14 h-14 mx-auto mb-5 flex items-center justify-center rounded-2xl bg-[#FDF4EC] border border-[#EADFD5]">
-                <svg aria-hidden="true" className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#1A1614" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 3l7 3v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z" fill="#67C3BA" fillOpacity="0.35" />
-                  <path d="M9.5 12l2 2 3.5-4" />
-                </svg>
+            {/* Promise 3 — Sanctuary arch / trust emblem */}
+            <div className="py-8 md:py-4 px-6 md:px-8 reveal-item delay-300">
+              <div className="mb-6 flex items-center justify-between">
+                <span className="font-serif text-2xl text-[#7A1A3A]/40 font-bold">III</span>
+                <div className="w-12 h-12 rounded-full bg-[#FAF7F2] border border-[#1C1917]/10 flex items-center justify-center text-[#7A1A3A]">
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 6h18M5 6v14M19 6v14" />
+                    <path d="M2 3.5c6-.8 14-.8 20 0" />
+                    <path d="M9 10h6" />
+                    <circle cx="12" cy="15" r="1.5" />
+                  </svg>
+                </div>
               </div>
-              <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-2.5">
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#1C1917] mb-3">
                 {t.promises.items[2].title}
               </h3>
-              <p className="text-sm text-[#524B47] leading-relaxed">
+              <p className="text-sm sm:text-base text-[#6B645C] leading-relaxed font-sans">
                 {t.promises.items[2].desc}
               </p>
             </div>
 
           </div>
 
-          {/* Signature Mi&u Peach-Cream Editorial Callout */}
-          <div className="max-w-3xl mx-auto bg-[#FDF4EC] border border-[#EADFD5] rounded-2xl p-8 sm:p-10 text-center">
-            <svg aria-hidden="true" className="w-8 h-8 mx-auto mb-4 text-[#810D41]" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M10 14h4v6H8v-6c0-4 2-7 5-8M21 14h4v6h-6v-6c0-4 2-7 5-8" />
-            </svg>
-            <p className="font-serif text-lg sm:text-2xl text-[#1A1614] leading-snug">
+          {/* Editorial Pullquote (Spacious & Refined) */}
+          <div className="max-w-3xl mx-auto border-t border-[#1C1917]/10 pt-12 text-center reveal-item delay-400">
+            <span className="text-3xl text-[#7A1A3A]/30 font-serif block mb-2">“</span>
+            <p className="font-serif text-xl sm:text-2xl md:text-3xl text-[#1C1917] leading-snug font-normal italic">
               {t.promises.callout}
             </p>
           </div>
@@ -315,57 +373,50 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= 3. OUR HEART (MINT TEAL FEATURE SECTION) ================= */}
-      {/* Preserves verbatim copy inside Mi&u's mint teal + white card + dark ink layout */}
-      <section id="heart" className="relative overflow-hidden py-20 bg-[#67C3BA] text-[#0E1D1C]">
-        
-        {/* Subtle decorative curve accent */}
-        <div aria-hidden="true" className="pointer-events-none absolute -top-28 -right-28 w-[34rem] h-[34rem] rounded-full bg-[#57B3AA]/55"></div>
-
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
+      {/* ================= 3. OUR HEART (WARM LINEN & ASYMMETRIC STORYTELLING) ================= */}
+      {/* Replaced harsh mint green background with tranquil, natural linen tone */}
+      <section id="heart" className="py-24 sm:py-32 bg-[#F2ECE4] text-[#1C1917]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           
-          <div className="text-center mb-12">
-            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#0D1E1D] inline-flex items-center gap-2 mb-3">
-              {t.heart.title}
-              <svg aria-hidden="true" className="w-7 h-7 text-white shrink-0" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-                <path d="M6 12L4 7M13 8V3M19 11L23 7" />
-              </svg>
-            </h2>
-            <p className="font-serif text-lg sm:text-2xl text-[#0D1E1D]/90 italic">
-              {t.heart.mission}
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             
-            {/* Left: Crisp White Card */}
-            <div className="lg:col-span-6 bg-white rounded-3xl p-7 sm:p-10 shadow-lg border border-black/5">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FDF4EC] text-[#810D41] text-xs font-semibold uppercase tracking-wider mb-5">
+            {/* Left: Purpose Statement */}
+            <div className="lg:col-span-5 reveal-item">
+              <span className="text-[11px] uppercase tracking-[0.25em] text-[#7A1A3A] font-semibold block mb-3 font-sans">
                 {t.heart.purposeBadge}
-              </div>
-              <p className="text-base sm:text-lg text-[#2B2522] leading-relaxed">
+              </span>
+              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1C1917] mb-4">
+                {t.heart.title}
+              </h2>
+              <p className="font-serif text-lg sm:text-xl text-[#7A1A3A] italic mb-6">
+                {t.heart.mission}
+              </p>
+              <div className="w-12 h-[1px] bg-[#7A1A3A]/40 mb-6"></div>
+              <p className="text-sm sm:text-base text-[#6B645C] leading-relaxed font-sans">
                 {t.heart.purposeText}
               </p>
             </div>
 
-            {/* Right: What You'll Experience stacked points in high-contrast ink */}
-            <div className="lg:col-span-6 space-y-6">
-              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#0D1E1D]">
+            {/* Right: What You'll Experience (Subtle & Elegant) */}
+            <div className="lg:col-span-7 space-y-8 reveal-item delay-200">
+              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#1C1917] border-b border-[#1C1917]/10 pb-4">
                 {t.heart.experienceTitle}
               </h3>
 
-              <div className="space-y-5">
-                {t.heart.experiencePoints.map((item) => (
-                  <div key={item.num} className="bg-white/60 backdrop-blur-sm rounded-2xl p-5 border border-[#0D1E1D]/10">
-                    <h4 className="font-serif text-lg font-bold text-[#0D1E1D] mb-1.5 flex items-center gap-2.5">
-                      <span className="w-6 h-6 rounded-full bg-[#810D41] text-white text-xs font-sans flex items-center justify-center shrink-0">
-                        {item.num}
-                      </span>
-                      {item.title}
-                    </h4>
-                    <p className="text-sm sm:text-base text-[#0E1D1C]/90 leading-relaxed pl-8">
-                      {item.desc}
-                    </p>
+              <div className="space-y-8">
+                {t.heart.experiencePoints.map((item, idx) => (
+                  <div key={item.num} className="flex gap-5 sm:gap-6 items-start">
+                    <span className="font-serif text-3xl sm:text-4xl font-bold text-[#7A1A3A]/40 leading-none shrink-0 pt-1">
+                      0{idx + 1}
+                    </span>
+                    <div>
+                      <h4 className="font-serif text-lg sm:text-xl font-bold text-[#1C1917] mb-2">
+                        {item.title}
+                      </h4>
+                      <p className="text-sm sm:text-base text-[#6B645C] leading-relaxed font-sans">
+                        {item.desc}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -376,106 +427,105 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= 4. OUR SPACE — REAL DOJO & COMMUNITY PHOTOS (PEACH CREAM) ================= */}
-      {/* Balanced 2-column masonry respecting exact native ratios (3:4 + 4:3 on left = 4:3 + 3:4 on right) */}
-      <section id="space" className="py-20 bg-[#FDF4EC]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+      {/* ================= 4. OUR SPACE — REAL SANCTUARY GALLERY (GALLERY EXHIBITION LAYOUT) ================= */}
+      {/* Real photos of Vancouver Center presented like an architectural editorial */}
+      <section id="space" className="py-24 sm:py-32 bg-[#FAF7F2]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           
-          <div className="text-center mb-12">
-            {/* Three diamond stars accent matching Mi&u "Recent work" */}
-            <svg aria-hidden="true" className="w-10 h-10 mx-auto mb-3 text-[#1A1614]" viewBox="0 0 40 40" fill="currentColor">
-              <path d="M20 4l2.5 5.5L28 12l-5.5 2.5L20 20l-2.5-5.5L12 12l5.5-2.5L20 4zM9 22l1.8 3.5L14.5 27l-3.7 1.5L9 32l-1.8-3.5L3.5 27l3.7-1.5L9 22zM30 22l1.8 3.5L35.5 27l-3.7 1.5L30 32l-1.8-3.5L24.5 27l3.7-1.5L30 22z" />
-            </svg>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1614] mb-3">
+          <div className="text-center max-w-2xl mx-auto mb-16 reveal-item">
+            <span className="text-[11px] uppercase tracking-[0.25em] text-[#7A1A3A] font-semibold block mb-3 font-sans">
+              {t.space.badge}
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1C1917]">
               {t.space.title}
             </h2>
-            <p className="text-sm sm:text-base text-[#524B47] max-w-xl mx-auto">
+            <div className="w-10 h-[1.5px] bg-[#7A1A3A] mx-auto mt-5 mb-4"></div>
+            <p className="text-sm sm:text-base text-[#6B645C] font-serif">
               {t.space.subtitle}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 items-start">
+          {/* Exhibition Grid */}
+          <div className="grid sm:grid-cols-2 gap-8 lg:gap-10">
             
-            {/* Left Column: 3:4 Portrait Session + 4:3 Landscape Room */}
-            <div className="space-y-6">
-              <figure className="lp-card group bg-white rounded-3xl p-3 border border-[#EADFD5] shadow-sm">
-                <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-[#F5ECE2]">
-                  <Image 
-                    src="/assets/dojo_session.jpg" 
-                    alt={t.space.photos[0].alt} 
-                    fill 
-                    className="object-cover object-center group-hover:scale-[1.03] transition-transform duration-500" 
-                  />
-                </div>
-                <figcaption className="pt-3 pb-1 px-2 flex items-center justify-between gap-2">
-                  <span className="font-serif font-semibold text-sm sm:text-base text-[#1A1614]">
-                    {t.space.photos[0].title}
-                  </span>
-                  <span className="text-xs text-[#810D41] font-medium">
-                    {t.space.photos[0].sub}
-                  </span>
-                </figcaption>
-              </figure>
-
-              <figure className="lp-card group bg-white rounded-3xl p-3 border border-[#EADFD5] shadow-sm">
-                <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden bg-[#F5ECE2]">
-                  <Image 
-                    src="/assets/gallery_3.jpg" 
-                    alt={t.space.photos[1].alt} 
-                    fill 
-                    className="object-cover object-center group-hover:scale-[1.03] transition-transform duration-500" 
-                  />
-                </div>
-                <figcaption className="pt-3 pb-1 px-2 flex items-center justify-between gap-2">
-                  <span className="font-serif font-semibold text-sm sm:text-base text-[#1A1614]">
-                    {t.space.photos[1].title}
-                  </span>
-                  <span className="text-xs text-[#524B47]">
-                    {t.space.photos[1].sub}
-                  </span>
-                </figcaption>
-              </figure>
+            {/* Photo 1: Seated & Reclined Care Session */}
+            <div className="group reveal-item delay-100">
+              <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-[#E8E2D8] shadow-sm">
+                <Image 
+                  src="/assets/dojo_session.jpg" 
+                  alt={t.space.photos[0].alt} 
+                  fill 
+                  className="object-cover object-center img-editorial" 
+                />
+              </div>
+              <div className="pt-4 flex items-baseline justify-between gap-4">
+                <span className="font-serif text-base font-semibold text-[#1C1917]">
+                  {t.space.photos[0].title}
+                </span>
+                <span className="text-xs text-[#7A1A3A] font-sans font-medium">
+                  {t.space.photos[0].sub}
+                </span>
+              </div>
             </div>
 
-            {/* Right Column: 4:3 Landscape Community + 3:4 Portrait Entrance Door */}
-            <div className="space-y-6">
-              <figure className="lp-card group bg-white rounded-3xl p-3 border border-[#EADFD5] shadow-sm">
-                <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden bg-[#F5ECE2]">
-                  <Image 
-                    src="/assets/dojo_community.jpg" 
-                    alt={t.space.photos[2].alt} 
-                    fill 
-                    className="object-cover object-center group-hover:scale-[1.03] transition-transform duration-500" 
-                  />
-                </div>
-                <figcaption className="pt-3 pb-1 px-2 flex items-center justify-between gap-2">
-                  <span className="font-serif font-semibold text-sm sm:text-base text-[#1A1614]">
-                    {t.space.photos[2].title}
-                  </span>
-                  <span className="text-xs text-[#810D41] font-medium">
-                    {t.space.photos[2].sub}
-                  </span>
-                </figcaption>
-              </figure>
+            {/* Photo 2: Community Fellowship Table */}
+            <div className="group reveal-item delay-200">
+              <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-[#E8E2D8] shadow-sm">
+                <Image 
+                  src="/assets/dojo_community.jpg" 
+                  alt={t.space.photos[2].alt} 
+                  fill 
+                  className="object-cover object-center img-editorial" 
+                />
+              </div>
+              <div className="pt-4 flex items-baseline justify-between gap-4">
+                <span className="font-serif text-base font-semibold text-[#1C1917]">
+                  {t.space.photos[2].title}
+                </span>
+                <span className="text-xs text-[#7A1A3A] font-sans font-medium">
+                  {t.space.photos[2].sub}
+                </span>
+              </div>
+            </div>
 
-              <figure className="lp-card group bg-white rounded-3xl p-3 border border-[#EADFD5] shadow-sm">
-                <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-[#F5ECE2]">
-                  <Image 
-                    src="/assets/gallery_2.jpg" 
-                    alt={t.space.photos[3].alt} 
-                    fill 
-                    className="object-cover object-center group-hover:scale-[1.03] transition-transform duration-500" 
-                  />
-                </div>
-                <figcaption className="pt-3 pb-1 px-2 flex items-center justify-between gap-2">
-                  <span className="font-serif font-semibold text-sm sm:text-base text-[#1A1614]">
-                    {t.space.photos[3].title}
-                  </span>
-                  <span className="text-xs text-[#524B47]">
-                    {t.space.photos[3].sub}
-                  </span>
-                </figcaption>
-              </figure>
+            {/* Photo 3: Calm Session Room */}
+            <div className="group reveal-item delay-300">
+              <div className="relative aspect-[16/11] w-full rounded-2xl overflow-hidden bg-[#E8E2D8] shadow-sm">
+                <Image 
+                  src="/assets/gallery_3.jpg" 
+                  alt={t.space.photos[1].alt} 
+                  fill 
+                  className="object-cover object-center img-editorial" 
+                />
+              </div>
+              <div className="pt-4 flex items-baseline justify-between gap-4">
+                <span className="font-serif text-base font-semibold text-[#1C1917]">
+                  {t.space.photos[1].title}
+                </span>
+                <span className="text-xs text-[#6B645C] font-sans">
+                  {t.space.photos[1].sub}
+                </span>
+              </div>
+            </div>
+
+            {/* Photo 4: Unit E Entrance */}
+            <div className="group reveal-item delay-400">
+              <div className="relative aspect-[16/11] w-full rounded-2xl overflow-hidden bg-[#E8E2D8] shadow-sm">
+                <Image 
+                  src="/assets/gallery_2.jpg" 
+                  alt={t.space.photos[3].alt} 
+                  fill 
+                  className="object-cover object-center img-editorial" 
+                />
+              </div>
+              <div className="pt-4 flex items-baseline justify-between gap-4">
+                <span className="font-serif text-base font-semibold text-[#1C1917]">
+                  {t.space.photos[3].title}
+                </span>
+                <span className="text-xs text-[#6B645C] font-sans">
+                  {t.space.photos[3].sub}
+                </span>
+              </div>
             </div>
 
           </div>
@@ -483,62 +533,43 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= 5. WHAT TO EXPECT (CRISP WHITE) ================= */}
-      <section id="expect" className="py-20 bg-white border-t border-[#EADFD5]">
+      {/* ================= 5. WHAT TO EXPECT (SERENE VERTICAL JOURNEY) ================= */}
+      <section id="expect" className="py-24 sm:py-32 bg-white border-t border-[#1C1917]/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           
-          <div className="text-center mb-12">
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1614] mb-3">
+          <div className="text-center max-w-xl mx-auto mb-16 reveal-item">
+            <span className="text-[11px] uppercase tracking-[0.25em] text-[#7A1A3A] font-semibold block mb-3 font-sans">
+              {t.expect.badge}
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1C1917]">
               {t.expect.title}
             </h2>
-            <p className="text-sm sm:text-base text-[#524B47]">
+            <div className="w-10 h-[1.5px] bg-[#7A1A3A] mx-auto mt-5 mb-4"></div>
+            <p className="text-sm sm:text-base text-[#6B645C] font-serif">
               {t.expect.subtitle}
             </p>
           </div>
 
-          <div className="space-y-4">
-            {t.expect.steps.map((st) => (
-              <div key={st.step} className="bg-[#FDF4EC] border border-[#EADFD5] rounded-2xl p-6 sm:p-7 flex items-start gap-5">
-                <div className="w-12 h-12 rounded-full bg-[#810D41] text-white font-serif font-bold text-lg flex items-center justify-center shrink-0">
-                  {st.step}
+          {/* Minimalist Step Progression */}
+          <div className="relative pl-6 sm:pl-10 space-y-12 before:absolute before:left-2 sm:before:left-3 before:top-3 before:bottom-3 before:w-[1px] before:bg-[#1C1917]/15">
+            {t.expect.steps.map((st, i) => (
+              <div key={st.step} className="relative reveal-item" style={{ animationDelay: `${i * 150}ms` }}>
+                {/* Connecting Node */}
+                <div className="absolute -left-[27px] sm:-left-[35px] top-1.5 w-3.5 h-3.5 rounded-full bg-white border-2 border-[#7A1A3A]"></div>
+                
+                <div className="flex flex-wrap items-center gap-3 mb-2">
+                  <span className="text-xs font-serif font-bold text-[#7A1A3A] tracking-wider">
+                    STEP {st.step}
+                  </span>
+                  <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-[#1C1917]/15 text-[#6B645C] font-sans">
+                    {st.time}
+                  </span>
                 </div>
-                <div>
-                  <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-1.5 flex flex-wrap items-center gap-2.5">
-                    {st.title}
-                    <span className="text-xs font-sans font-semibold px-2.5 py-0.5 rounded-full bg-[#67C3BA]/30 text-[#0E1D1C]">
-                      {st.time}
-                    </span>
-                  </h3>
-                  <p className="text-sm sm:text-base text-[#524B47] leading-relaxed">
-                    {st.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-        </div>
-      </section>
-
-      {/* ================= 6. BEFORE YOU VISIT (CLEAN BORDERED GRID) ================= */}
-      <section id="visit" className="py-20 bg-white border-t border-[#EADFD5]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          
-          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-center text-[#1A1614] mb-12">
-            {t.visit.title}
-          </h2>
-
-          <div className="grid md:grid-cols-3 rounded-3xl border border-[#EADFD5] bg-[#FDF4EC]/40 overflow-hidden divide-y md:divide-y-0 md:divide-x divide-[#EADFD5]">
-            {t.visit.items.map((it) => (
-              <div key={it.title} className="p-8 text-center">
-                <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-white border border-[#EADFD5] flex items-center justify-center text-2xl">
-                  {it.icon}
-                </div>
-                <h3 className="font-serif text-xl font-bold text-[#1A1614] mb-3">
-                  {it.title}
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#1C1917] mb-2">
+                  {st.title}
                 </h3>
-                <p className="text-sm text-[#524B47] leading-relaxed">
-                  {it.desc}
+                <p className="text-sm sm:text-base text-[#6B645C] leading-relaxed font-sans max-w-2xl">
+                  {st.desc}
                 </p>
               </div>
             ))}
@@ -547,21 +578,107 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= 7. YOUR HOSTS (PEACH CREAM + NEW YUI TAKEDA PORTRAIT) ================= */}
-      <section id="hosts" className="py-20 bg-[#FDF4EC] border-t border-[#EADFD5]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+      {/* ================= 6. BEFORE YOU VISIT (BESPOKE VECTOR LINE ART, ZERO EMOJIS) ================= */}
+      {/* Replaced AI emojis with clean artisanal architectural line drawings */}
+      <section id="visit" className="py-24 sm:py-32 bg-[#FAF7F2] border-t border-[#1C1917]/10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
           
-          <div className="text-center mb-12">
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1614] mb-3">
-              {t.hosts.title}
+          <div className="text-center max-w-xl mx-auto mb-16 reveal-item">
+            <span className="text-[11px] uppercase tracking-[0.25em] text-[#7A1A3A] font-semibold block mb-3 font-sans">
+              {t.visit.badge}
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1C1917]">
+              {t.visit.title}
             </h2>
-            <div className="w-16 h-0.5 bg-[#810D41] mx-auto"></div>
+            <div className="w-10 h-[1.5px] bg-[#7A1A3A] mx-auto mt-5"></div>
           </div>
 
-          <div className="bg-white border border-[#EADFD5] rounded-3xl p-8 sm:p-10 shadow-sm flex flex-col sm:flex-row items-center gap-8 sm:gap-10">
+          <div className="grid md:grid-cols-3 gap-8">
+            
+            {/* Attire Card */}
+            <div className="bg-white border border-[#1C1917]/10 rounded-2xl p-8 text-center reveal-item delay-100 hover:border-[#7A1A3A]/40 transition-colors">
+              <div className="w-12 h-12 mx-auto mb-5 rounded-full bg-[#FAF7F2] border border-[#1C1917]/10 flex items-center justify-center text-[#7A1A3A]">
+                {/* Minimalist linen shirt line icon */}
+                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M6 4l6 3 6-3 3 5-3 2v9H6v-9L3 9l3-5z" />
+                  <path d="M9.5 5.75A3.5 3.5 0 0 0 14.5 5.75" />
+                </svg>
+              </div>
+              <span className="text-[11px] font-serif font-bold tracking-widest text-[#7A1A3A]/60 block mb-1">
+                01
+              </span>
+              <h3 className="font-serif text-xl font-bold text-[#1C1917] mb-3">
+                {t.visit.items[0].title}
+              </h3>
+              <p className="text-sm text-[#6B645C] leading-relaxed font-sans">
+                {t.visit.items[0].desc}
+              </p>
+            </div>
+
+            {/* Belongings Card */}
+            <div className="bg-white border border-[#1C1917]/10 rounded-2xl p-8 text-center reveal-item delay-200 hover:border-[#7A1A3A]/40 transition-colors">
+              <div className="w-12 h-12 mx-auto mb-5 rounded-full bg-[#FAF7F2] border border-[#1C1917]/10 flex items-center justify-center text-[#7A1A3A]">
+                {/* Minimalist open hands icon */}
+                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2a5 5 0 0 0-5 5v3H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-2V7a5 5 0 0 0-5-5z" opacity="0.3" />
+                  <path d="M4 14l5-2 4 4 7-7" />
+                  <path d="M18 9V5h-4" />
+                </svg>
+              </div>
+              <span className="text-[11px] font-serif font-bold tracking-widest text-[#7A1A3A]/60 block mb-1">
+                02
+              </span>
+              <h3 className="font-serif text-xl font-bold text-[#1C1917] mb-3">
+                {t.visit.items[1].title}
+              </h3>
+              <p className="text-sm text-[#6B645C] leading-relaxed font-sans">
+                {t.visit.items[1].desc}
+              </p>
+            </div>
+
+            {/* Parking Card */}
+            <div className="bg-white border border-[#1C1917]/10 rounded-2xl p-8 text-center reveal-item delay-300 hover:border-[#7A1A3A]/40 transition-colors">
+              <div className="w-12 h-12 mx-auto mb-5 rounded-full bg-[#FAF7F2] border border-[#1C1917]/10 flex items-center justify-center text-[#7A1A3A]">
+                {/* Minimalist architectural parking pin */}
+                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="4" y="4" width="16" height="16" rx="3" />
+                  <path d="M9 16V8h4a2.5 2.5 0 0 1 0 5H9" />
+                </svg>
+              </div>
+              <span className="text-[11px] font-serif font-bold tracking-widest text-[#7A1A3A]/60 block mb-1">
+                03
+              </span>
+              <h3 className="font-serif text-xl font-bold text-[#1C1917] mb-3">
+                {t.visit.items[2].title}
+              </h3>
+              <p className="text-sm text-[#6B645C] leading-relaxed font-sans">
+                {t.visit.items[2].desc}
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ================= 7. YOUR HOSTS (EDITORIAL MAGAZINE PORTRAIT) ================= */}
+      <section id="hosts" className="py-24 sm:py-32 bg-white border-t border-[#1C1917]/10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          
+          <div className="text-center max-w-xl mx-auto mb-16 reveal-item">
+            <span className="text-[11px] uppercase tracking-[0.25em] text-[#7A1A3A] font-semibold block mb-3 font-sans">
+              {t.hosts.badge}
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1C1917]">
+              {t.hosts.title}
+            </h2>
+            <div className="w-10 h-[1.5px] bg-[#7A1A3A] mx-auto mt-5"></div>
+          </div>
+
+          <div className="bg-[#FAF7F2] border border-[#1C1917]/10 rounded-3xl p-8 sm:p-12 flex flex-col md:flex-row items-center gap-8 sm:gap-12 reveal-item delay-150">
             
             {/* Host Portrait */}
-            <div className="relative w-44 h-48 sm:w-52 sm:h-56 rounded-2xl overflow-hidden shrink-0 shadow-md border-2 border-[#67C3BA]/45 bg-[#F5F2EE]">
+            <div className="relative w-48 h-56 sm:w-56 sm:h-64 rounded-2xl overflow-hidden shrink-0 shadow-md border border-[#1C1917]/10 bg-white">
               <Image 
                 src="/assets/staff_yui_takeda.jpg" 
                 alt={`${t.hosts.name}, ${t.hosts.role}`} 
@@ -570,19 +687,19 @@ export default function Home() {
               />
             </div>
 
-            {/* Introduction */}
-            <div className="text-center sm:text-left">
-              <span className="inline-block px-3 py-0.5 rounded-full bg-[#67C3BA]/25 text-[#0E1D1C] text-[11px] font-semibold uppercase tracking-wider mb-3">
+            {/* Introduction prose */}
+            <div className="text-center md:text-left">
+              <span className="inline-block text-[11px] uppercase tracking-[0.2em] font-sans font-semibold text-[#7A1A3A] mb-2">
                 {t.hosts.badge}
               </span>
-              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#1A1614] mb-1">
+              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#1C1917] mb-1">
                 {t.hosts.name}
               </h3>
-              <p className="text-xs uppercase tracking-widest font-semibold text-[#810D41] mb-5">
+              <p className="text-xs uppercase tracking-widest text-[#8C827A] mb-6 font-sans">
                 {t.hosts.role}
               </p>
 
-              <div className="text-sm sm:text-base text-[#2B2522] leading-relaxed space-y-2.5">
+              <div className="text-sm sm:text-base text-[#6B645C] leading-relaxed space-y-3 font-sans">
                 <p>{t.hosts.intro1}</p>
                 <p>{t.hosts.intro2}</p>
                 <p>{t.hosts.intro3}</p>
@@ -594,37 +711,43 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= 8. FAQ (HIGH-CONTRAST JET BLACK SECTION) ================= */}
-      <section id="faq" aria-labelledby="faq-heading" className="faq-accordion py-20 bg-[#0A0A0A] text-white">
+      {/* ================= 8. FAQ (MINIMALIST CALM SANCTUARY ACCORDION) ================= */}
+      <section id="faq" aria-labelledby="faq-heading" className="faq-accordion py-24 sm:py-32 bg-[#141312] text-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           
-          <div className="text-center mb-12">
-            <h2 id="faq-heading" className="font-serif text-3xl sm:text-4xl font-bold text-white mb-3">
+          <div className="text-center mb-16 reveal-item">
+            <span className="text-[11px] uppercase tracking-[0.25em] text-[#4A6B5D] font-semibold block mb-3 font-sans">
+              {t.faq.badge}
+            </span>
+            <h2 id="faq-heading" className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3">
               {t.faq.title}
             </h2>
-            <div className="w-16 h-0.5 bg-[#67C3BA] mx-auto"></div>
+            <div className="w-10 h-[1.5px] bg-[#4A6B5D] mx-auto mt-5"></div>
           </div>
 
-          <div className="border-t border-white/15">
+          <div className="border-t border-white/12">
             {t.faq.items.map((item, idx) => (
-              <details key={idx} className="py-5" open>
-                <summary className="font-medium text-sm sm:text-base text-white">
+              <details key={idx} className="py-6 group" open>
+                <summary className="font-serif text-base sm:text-lg text-white font-medium flex items-center justify-between gap-4">
                   <span>{item.q}</span>
+                  <span className="text-white/40 group-open:rotate-45 transition-transform text-xl font-sans font-light">
+                    +
+                  </span>
                 </summary>
-                <div className="mt-3 pl-6 text-sm text-[#D6D0CA] leading-relaxed">
+                <div className="mt-4 text-sm sm:text-base text-white/70 leading-relaxed font-sans pl-2">
                   {item.a}
                 </div>
               </details>
             ))}
           </div>
 
-          <div className="text-center mt-10 space-y-4">
-            <p className="text-sm text-[#C7C2BC]">
+          <div className="text-center mt-12 space-y-4 reveal-item delay-200">
+            <p className="text-xs sm:text-sm text-white/60 font-serif">
               {t.faq.prompt}
             </p>
             <a 
               href="#booking" 
-              className="inline-flex items-center justify-center px-7 py-3 rounded-full border border-white/30 hover:border-[#67C3BA] text-white text-sm font-medium transition-colors"
+              className="inline-flex items-center justify-center px-7 py-3 rounded-full border border-white/20 hover:border-[#4A6B5D] text-white text-xs tracking-wider uppercase font-medium transition-colors"
             >
               {t.faq.cta}
             </a>
@@ -633,44 +756,47 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= 9. CTA BANNER, RESERVATION FORM & CONSOLIDATED DOJO INFO ================= */}
-      <section id="booking" className="py-20 bg-[#0A0A0A] text-[#F7F1EB] border-t border-white/10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+      {/* ================= 9. CTA BANNER, RESERVATION FORM & DOJO INFO ================= */}
+      <section id="booking" className="py-24 sm:py-32 bg-[#1E1D1A] text-[#FAF7F2] border-t border-white/10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           
-          <div className="text-center mb-12">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3">
+          <div className="text-center max-w-2xl mx-auto mb-16 reveal-item">
+            <span className="text-[11px] uppercase tracking-[0.25em] text-[#4A6B5D] font-semibold block mb-3 font-sans">
+              {t.booking.badge}
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3">
               {t.booking.heading}
             </h2>
-            <p className="text-sm sm:text-base text-[#67C3BA] font-medium">
+            <p className="text-xs sm:text-sm text-[#4A6B5D] font-medium tracking-wide">
               {t.booking.hours}
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-8 items-start">
+          <div className="grid lg:grid-cols-12 gap-10 items-start">
             
             {/* Reservation Form */}
-            <div className="lg:col-span-7 bg-[#FDF4EC] text-[#1A1614] rounded-3xl p-6 sm:p-9 shadow-xl">
-              <h3 className="font-serif text-2xl font-bold text-[#1A1614] mb-2">
+            <div className="lg:col-span-7 bg-[#FAF7F2] text-[#1C1917] rounded-3xl p-7 sm:p-10 shadow-xl reveal-item delay-100">
+              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#1C1917] mb-2">
                 {t.booking.form.title}
               </h3>
-              <p className="text-xs sm:text-sm text-[#524B47] mb-6">
+              <p className="text-xs sm:text-sm text-[#6B645C] mb-8 font-sans">
                 {t.booking.form.subtitle}
               </p>
 
               {submitStatus === "success" ? (
-                <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-2xl text-center">
-                  <div className="text-3xl mb-2">✨</div>
-                  <h4 className="font-serif font-bold text-emerald-800 text-lg mb-1">
+                <div className="p-8 bg-emerald-50 border border-emerald-200 rounded-2xl text-center">
+                  <div className="text-3xl mb-3">🕊️</div>
+                  <h4 className="font-serif font-bold text-emerald-800 text-lg mb-2">
                     {t.booking.form.successTitle}
                   </h4>
-                  <p className="text-xs text-emerald-700">
+                  <p className="text-xs sm:text-sm text-emerald-700 leading-relaxed font-sans">
                     {t.booking.form.successDesc}
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleBookingSubmit} className="space-y-4">
+                <form onSubmit={handleBookingSubmit} className="space-y-5">
                   <div>
-                    <label htmlFor="full-name" className="block text-xs font-semibold text-[#1A1614] mb-1">
+                    <label htmlFor="full-name" className="block text-xs font-semibold uppercase tracking-wider text-[#1C1917] mb-1.5 font-sans">
                       {t.booking.form.fullNameLabel}
                     </label>
                     <input 
@@ -680,13 +806,13 @@ export default function Home() {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder={t.booking.form.fullNamePlaceholder} 
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD5] bg-white text-sm text-[#1A1614] focus:outline-none focus:border-[#810D41]"
+                      className="w-full px-4 py-3 rounded-xl border border-[#1C1917]/15 bg-white text-sm text-[#1C1917] focus:outline-none focus:border-[#7A1A3A] transition-colors"
                     />
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="email-addr" className="block text-xs font-semibold text-[#1A1614] mb-1">
+                      <label htmlFor="email-addr" className="block text-xs font-semibold uppercase tracking-wider text-[#1C1917] mb-1.5 font-sans">
                         {t.booking.form.emailLabel}
                       </label>
                       <input 
@@ -696,12 +822,11 @@ export default function Home() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder={t.booking.form.emailPlaceholder} 
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD5] bg-white text-sm text-[#1A1614] focus:outline-none focus:border-[#810D41]"
+                        className="w-full px-4 py-3 rounded-xl border border-[#1C1917]/15 bg-white text-sm text-[#1C1917] focus:outline-none focus:border-[#7A1A3A] transition-colors"
                       />
                     </div>
                     <div>
-                      {/* Notice: Changed from "Phone (Call/SMS)" to "Phone Number" per landline restriction */}
-                      <label htmlFor="phone-num" className="block text-xs font-semibold text-[#1A1614] mb-1">
+                      <label htmlFor="phone-num" className="block text-xs font-semibold uppercase tracking-wider text-[#1C1917] mb-1.5 font-sans">
                         {t.booking.form.phoneLabel}
                       </label>
                       <input 
@@ -710,13 +835,13 @@ export default function Home() {
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         placeholder={t.booking.form.phonePlaceholder} 
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD5] bg-white text-sm text-[#1A1614] focus:outline-none focus:border-[#810D41]"
+                        className="w-full px-4 py-3 rounded-xl border border-[#1C1917]/15 bg-white text-sm text-[#1C1917] focus:outline-none focus:border-[#7A1A3A] transition-colors"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="pref-time" className="block text-xs font-semibold text-[#1A1614] mb-1">
+                    <label htmlFor="pref-time" className="block text-xs font-semibold uppercase tracking-wider text-[#1C1917] mb-1.5 font-sans">
                       {t.booking.form.timeLabel}
                     </label>
                     <input 
@@ -724,12 +849,12 @@ export default function Home() {
                       type="datetime-local" 
                       value={formData.preferredTime}
                       onChange={(e) => setFormData({ ...formData, preferredTime: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD5] bg-white text-sm text-[#524B47] focus:outline-none focus:border-[#810D41]"
+                      className="w-full px-4 py-3 rounded-xl border border-[#1C1917]/15 bg-white text-sm text-[#6B645C] focus:outline-none focus:border-[#7A1A3A] transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="notes" className="block text-xs font-semibold text-[#1A1614] mb-1">
+                    <label htmlFor="notes" className="block text-xs font-semibold uppercase tracking-wider text-[#1C1917] mb-1.5 font-sans">
                       {t.booking.form.notesLabel}
                     </label>
                     <textarea 
@@ -738,20 +863,20 @@ export default function Home() {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder={t.booking.form.notesPlaceholder}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD5] bg-white text-sm text-[#1A1614] focus:outline-none focus:border-[#810D41]"
+                      className="w-full px-4 py-3 rounded-xl border border-[#1C1917]/15 bg-white text-sm text-[#1C1917] focus:outline-none focus:border-[#7A1A3A] transition-colors"
                     ></textarea>
                   </div>
 
                   <button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="btn-primary-pill w-full py-3.5 px-6 rounded-full bg-[#810D41] hover:bg-[#640932] text-white font-semibold text-sm transition-all shadow-md disabled:opacity-50 cursor-pointer"
+                    className="w-full py-4 px-6 rounded-full bg-[#7A1A3A] hover:bg-[#5E122B] text-white font-medium text-xs sm:text-sm tracking-wider uppercase transition-all shadow-md disabled:opacity-50 cursor-pointer"
                   >
                     {isSubmitting ? t.booking.form.submittingBtn : t.booking.form.submitBtn}
                   </button>
 
                   {submitStatus === "error" && (
-                    <p className="text-xs text-rose-600 text-center">
+                    <p className="text-xs text-rose-600 text-center font-sans">
                       {t.booking.form.errorMsg}
                     </p>
                   )}
@@ -759,54 +884,54 @@ export default function Home() {
               )}
             </div>
 
-            {/* Direct Contact & Map */}
-            <div className="lg:col-span-5 space-y-4">
+            {/* Direct Contact & Google Map */}
+            <div className="lg:col-span-5 space-y-6 reveal-item delay-200">
               
               {/* Quick Contact Card */}
-              <div className="bg-white/[0.04] border border-white/15 rounded-3xl p-6 text-sm">
-                <h4 className="font-serif font-bold text-white text-lg mb-3">
+              <div className="bg-white/5 border border-white/10 rounded-3xl p-7 text-sm">
+                <h4 className="font-serif font-bold text-white text-lg mb-4">
                   {t.booking.contactCard.title}
                 </h4>
-                <div className="space-y-2.5 text-[#E5DED7] text-xs sm:text-sm">
-                  <p>📍 <strong>{t.booking.contactCard.addressLabel}</strong> {t.booking.contactCard.addressVal}</p>
-                  <p>🕒 <strong>{t.booking.contactCard.hoursLabel}</strong> {t.booking.contactCard.hoursVal}</p>
+                <div className="space-y-3 text-white/80 text-xs sm:text-sm font-sans leading-relaxed">
+                  <p>📍 <strong className="text-white">{t.booking.contactCard.addressLabel}</strong> {t.booking.contactCard.addressVal}</p>
+                  <p>🕒 <strong className="text-white">{t.booking.contactCard.hoursLabel}</strong> {t.booking.contactCard.hoursVal}</p>
                   <p>
-                    📞 <strong>{t.booking.contactCard.phoneLabel}</strong>{" "}
-                    <a href="tel:+16045682867" className="text-[#67C3BA] hover:underline font-medium">
+                    📞 <strong className="text-white">{t.booking.contactCard.phoneLabel}</strong>{" "}
+                    <a href="tel:+16045682867" className="text-[#4A6B5D] hover:underline font-medium">
                       +1 (604) 568-2867
                     </a>
                   </p>
                   <p>
-                    ✉️ <strong>{t.booking.contactCard.emailLabel}</strong>{" "}
-                    <a href="mailto:info-can@worlddivinelight.org" className="text-[#67C3BA] hover:underline font-medium">
+                    ✉️ <strong className="text-white">{t.booking.contactCard.emailLabel}</strong>{" "}
+                    <a href="mailto:info-can@worlddivinelight.org" className="text-[#4A6B5D] hover:underline font-medium">
                       info-can@worlddivinelight.org
                     </a>
                   </p>
                 </div>
 
-                {/* Direct Action Buttons: Voice Call & Email (SMS removed due to landline restriction) */}
-                <div className="mt-5 pt-4 border-t border-white/15 flex gap-2.5">
+                {/* Direct Action Buttons: Voice Call & Email (Zero SMS) */}
+                <div className="mt-6 pt-5 border-t border-white/10 flex gap-3">
                   <a 
                     href="tel:+16045682867" 
-                    className="btn-primary-pill flex-1 py-2.5 rounded-full bg-[#810D41] hover:bg-[#640932] text-white font-semibold text-xs text-center transition-all shadow-sm flex items-center justify-center gap-1.5"
+                    className="flex-1 py-3 rounded-full bg-[#7A1A3A] hover:bg-[#5E122B] text-white font-medium text-xs tracking-wider uppercase text-center transition-all shadow-sm flex items-center justify-center gap-1.5"
                   >
                     {t.booking.contactCard.callBtn}
                   </a>
                   <a 
                     href="mailto:info-can@worlddivinelight.org" 
-                    className="flex-1 py-2.5 rounded-full border border-[#67C3BA] text-[#67C3BA] hover:bg-[#67C3BA]/10 font-semibold text-xs text-center transition-all flex items-center justify-center gap-1.5"
+                    className="flex-1 py-3 rounded-full border border-white/20 hover:border-[#4A6B5D] text-white font-medium text-xs tracking-wider uppercase text-center transition-all flex items-center justify-center gap-1.5"
                   >
                     {t.booking.contactCard.emailBtn}
                   </a>
                 </div>
 
-                <p className="text-[11px] text-white/55 mt-4 pt-3 border-t border-white/10 text-center">
+                <p className="text-[11px] text-white/45 mt-4 pt-3 border-t border-white/5 text-center font-sans tracking-wide">
                   {t.booking.contactCard.badge}
                 </p>
               </div>
 
               {/* Map Embed */}
-              <div className="rounded-3xl overflow-hidden border border-white/15 h-56 relative">
+              <div className="rounded-3xl overflow-hidden border border-white/10 h-60 relative">
                 <iframe 
                   title="Vancouver Spiritual Center Location"
                   src="https://www.google.com/maps?q=2800%20Douglas%20Road%2C%20Unit%20E%2C%20Burnaby%2C%20B.C.%20V5C%205B7&output=embed"
@@ -820,7 +945,7 @@ export default function Home() {
                   href="https://maps.google.com/?q=2800+Douglas+Road+Unit+E+Burnaby+BC+V5C+5B7" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="absolute top-3 left-3 bg-white/95 hover:bg-white text-[#1A1614] px-3 py-1.5 rounded-full text-xs font-semibold shadow-md backdrop-blur-sm transition-all flex items-center gap-1"
+                  className="absolute top-3 left-3 bg-white/95 hover:bg-white text-[#1C1917] px-3.5 py-1.5 rounded-full text-xs font-semibold shadow-md backdrop-blur-sm transition-all flex items-center gap-1"
                 >
                   {t.booking.contactCard.mapBtn}
                 </a>
@@ -833,30 +958,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= 10. MINIMAL FOOTER (NO DUPLICATE INFO) ================= */}
-      <footer className="bg-[#050505] text-[#F7F1EB]/70 py-10 px-4 text-center text-xs border-t border-white/10">
+      {/* ================= 10. MINIMAL FOOTER ================= */}
+      <footer className="bg-[#0E0D0C] text-white/60 py-12 px-4 text-center text-xs border-t border-white/10 font-sans">
         <div className="max-w-4xl mx-auto space-y-2">
           <p className="font-serif text-base sm:text-lg text-white font-bold tracking-wide">
             {t.footer.org}
           </p>
-          <p className="text-[11px] text-white/45">
+          <p className="text-[11px] text-white/40 tracking-wider">
             {t.footer.copyright}
           </p>
         </div>
       </footer>
 
       {/* ================= MOBILE STICKY BOTTOM BAR ================= */}
-      {/* Notice: Changed from SMS Us to Call Us per landline restriction */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FDF4EC]/95 backdrop-blur-md border-t border-[#EADFD5] px-4 py-2.5 flex items-center gap-2.5">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-t border-[#1C1917]/10 px-4 py-2.5 flex items-center gap-2.5">
         <a 
           href="tel:+16045682867" 
-          className="flex-1 py-2.5 rounded-full border border-[#810D41]/35 text-[#810D41] text-center text-xs font-semibold bg-white/80 flex items-center justify-center gap-1"
+          className="flex-1 py-2.5 rounded-full border border-[#7A1A3A]/40 text-[#7A1A3A] text-center text-xs font-semibold bg-white flex items-center justify-center gap-1"
         >
           {t.mobileBar.callBtn}
         </a>
         <a 
           href="#booking" 
-          className="btn-primary-pill flex-[2] py-2.5 rounded-full bg-[#810D41] text-white text-center text-xs font-semibold shadow-sm"
+          className="flex-[2] py-2.5 rounded-full bg-[#7A1A3A] text-white text-center text-xs font-semibold shadow-sm"
         >
           {t.mobileBar.reserveBtn}
         </a>

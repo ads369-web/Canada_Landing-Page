@@ -24,6 +24,7 @@ export interface Translations {
     phoneCta: string;
     microcopy: string;
     imageAlt: string;
+    caption: string;
   };
   trustStrip: {
     location: string;
@@ -32,6 +33,7 @@ export interface Translations {
     reservation: string;
   };
   promises: {
+    badge: string;
     title: string;
     items: Array<{
       title: string;
@@ -52,6 +54,7 @@ export interface Translations {
     }>;
   };
   space: {
+    badge: string;
     title: string;
     subtitle: string;
     photos: Array<{
@@ -61,6 +64,7 @@ export interface Translations {
     }>;
   };
   expect: {
+    badge: string;
     title: string;
     subtitle: string;
     steps: Array<{
@@ -71,6 +75,7 @@ export interface Translations {
     }>;
   };
   visit: {
+    badge: string;
     title: string;
     items: Array<{
       icon: string;
@@ -88,6 +93,7 @@ export interface Translations {
     intro3: string;
   };
   faq: {
+    badge: string;
     title: string;
     items: Array<{
       q: string;
@@ -97,6 +103,7 @@ export interface Translations {
     cta: string;
   };
   booking: {
+    badge: string;
     heading: string;
     hours: string;
     form: {
@@ -167,6 +174,7 @@ export const TRANSLATIONS: Record<Lang, Translations> = {
       phoneCta: "Call +1 (604) 568-2867",
       microcopy: "First visit is completely free. No obligation, no pressure.",
       imageAlt: "Warm sunlight shining through forest trees representing Spiritual Harmony",
+      caption: "Burnaby Sanctuary · Serene Energy & Harmony",
     },
     trustStrip: {
       location: "Burnaby · Vancouver, BC",
@@ -175,6 +183,7 @@ export const TRANSLATIONS: Record<Lang, Translations> = {
       reservation: "Prior Reservation Required",
     },
     promises: {
+      badge: "Our Principles",
       title: "Three promises",
       items: [
         {
@@ -219,6 +228,7 @@ export const TRANSLATIONS: Record<Lang, Translations> = {
       ],
     },
     space: {
+      badge: "Sanctuary Atmosphere",
       title: "Our space",
       subtitle:
         "A warm, welcoming sanctuary in Burnaby designed for peaceful Divine Light sessions and friendly fellowship.",
@@ -246,6 +256,7 @@ export const TRANSLATIONS: Record<Lang, Translations> = {
       ],
     },
     expect: {
+      badge: "Flow of Your Visit",
       title: "What to expect",
       subtitle: "Your first visit is relaxed, unhurried, and lasts under an hour.",
       steps: [
@@ -270,6 +281,7 @@ export const TRANSLATIONS: Record<Lang, Translations> = {
       ],
     },
     visit: {
+      badge: "Practical Information",
       title: "Before you visit",
       items: [
         {
@@ -300,6 +312,7 @@ export const TRANSLATIONS: Record<Lang, Translations> = {
       intro3: "I truly look forward to meeting you at our centre!",
     },
     faq: {
+      badge: "Questions & Clarity",
       title: "Frequently asked questions",
       items: [
         {
@@ -319,6 +332,7 @@ export const TRANSLATIONS: Record<Lang, Translations> = {
       cta: "Have more questions?",
     },
     booking: {
+      badge: "Sanctuary Reservation",
       heading: "Experience the Power of Divine Light",
       hours: "Hours: Tue - Fri 12:00 PM – 7:00 PM / Sat - Sun 10:00 AM – 4:00 PM (Mon Closed)",
       form: {
@@ -389,6 +403,7 @@ export const TRANSLATIONS: Record<Lang, Translations> = {
       phoneCta: "📞 お電話 +1 (604) 568-2867",
       microcopy: "初回のご体験は完全無料です。勧誘・改宗などは一切ありません。",
       imageAlt: "森の木々から差し込む温かい光（心と魂の調和を象徴）",
+      caption: "バーナビー道場 · 心と魂の安らぎと調和",
     },
     trustStrip: {
       location: "カナダ・バーナビー（バンクーバー近郊）",
@@ -397,6 +412,7 @@ export const TRANSLATIONS: Record<Lang, Translations> = {
       reservation: "事前予約制",
     },
     promises: {
+      badge: "3つのお約束",
       title: "3つのお約束",
       items: [
         {
@@ -441,6 +457,7 @@ export const TRANSLATIONS: Record<Lang, Translations> = {
       ],
     },
     space: {
+      badge: "道場の雰囲気",
       title: "道場の雰囲気",
       subtitle:
         "バーナビーにある道場は、静かで落ち着いたお浄めのセッションと温かな交流ができる心地よい空間です。",
@@ -468,6 +485,7 @@ export const TRANSLATIONS: Record<Lang, Translations> = {
       ],
     },
     expect: {
+      badge: "当日の流れ",
       title: "当日の流れ",
       subtitle: "初めての方のご体験は、約50分ほどでゆったりと進みます。",
       steps: [
@@ -492,6 +510,7 @@ export const TRANSLATIONS: Record<Lang, Translations> = {
       ],
     },
     visit: {
+      badge: "ご来訪にあたって",
       title: "ご来訪にあたって",
       items: [
         {
@@ -522,6 +541,7 @@ export const TRANSLATIONS: Record<Lang, Translations> = {
       intro3: "カナダ道場で皆様とお会いできることを心より楽しみにしております！",
     },
     faq: {
+      badge: "よくあるご質問",
       title: "よくある質問",
       items: [
         {
@@ -541,6 +561,7 @@ export const TRANSLATIONS: Record<Lang, Translations> = {
       cta: "ご質問・ご予約はこちら",
     },
     booking: {
+      badge: "体験予約・お問い合わせ",
       heading: "お浄めのご予約・お問い合わせ",
       hours: "開館時間：火〜金 12:00〜19:00 / 土・日 10:00〜16:00（月曜休館）",
       form: {
